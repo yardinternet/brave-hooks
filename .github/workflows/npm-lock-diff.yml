@@ -1,0 +1,10 @@
+name: NPM Lockfile Changes
+on:
+  pull_request:
+    paths:
+      - 'package-lock.json'
+
+jobs:
+  lockfile_changes:
+    uses: yardinternet/workflows/.github/workflows/npm-lock-diff.yml@main
+    secrets: inherit
