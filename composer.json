@@ -4,16 +4,17 @@
 	"description": "Brave default hooks",
 	"license": "MIT",
 	"config": {
-		"sort-packages": true,
 		"allow-plugins": {
 			"pestphp/pest-plugin": true
 		},
 		"platform": {
 			"php": "8.1"
-		}
+		},
+		"sort-packages": true
 	},
 	"require": {
-		"php": ">=8.1"
+		"php": ">=8.1",
+		"yard/wp-hook-registrar": "^1.0"
 	},
 	"require-dev": {
 		"10up/wp_mock": "^0.4.2",
@@ -24,31 +25,18 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Yard\\BraveHooks\\": "src/"
+			"Yard\\Brave\\Hooks\\": "src/"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Yard\\BraveHooks\\Tests\\": "tests/"
+			"Yard\\Brave\\Hooks\\Tests\\": "tests/"
 		}
 	},
 	"scripts": {
-		"analyse": [
-			"sed -i -e 's#function __(#function ____(#' ./vendor/php-stubs/wordpress-stubs/wordpress-stubs.php",
-			"vendor/bin/phpstan analyse --debug --memory-limit 1G"
-		],
+		"analyse": "vendor/bin/phpstan analyse --debug --memory-limit 1G",
 		"format": "vendor/bin/php-cs-fixer fix",
 		"test": "vendor/bin/pest",
 		"test:coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage"
-	},
-	"extra": {
-		"acorn": {
-			"providers": [
-				"Yard\\BraveHooks\\BraveHooksServiceProvider"
-			],
-			"aliases": {
-				"BraveHooks": "Yard\\BraveHooks\\Facades\\BraveHooks"
-			}
-		}
 	}
 }
