@@ -1,7 +1,7 @@
 {
-	"name": "yard/skeleton-package",
+	"name": "yard/brave-hooks",
 	"type": "package",
-	"description": ":package_description",
+	"description": "Brave default hooks",
 	"license": "MIT",
 	"config": {
 		"sort-packages": true,
@@ -27,12 +27,12 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Yard\\SkeletonPackage\\": "src/"
+			"Yard\\BraveHooks\\": "src/"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Yard\\SkeletonPackage\\Tests\\": "tests/"
+			"Yard\\BraveHooks\\Tests\\": "tests/"
 		}
 	},
 	"scripts": {
@@ -47,10 +47,10 @@
 	"extra": {
 		"acorn": {
 			"providers": [
-				"Yard\\SkeletonPackage\\SkeletonPackageServiceProvider"
+				"Yard\\BraveHooks\\BraveHooksServiceProvider"
 			],
 			"aliases": {
-				"Example": "Yard\\SkeletonPackage\\Facades\\Example"
+				"BraveHooks": "Yard\\BraveHooks\\Facades\\BraveHooks"
 			}
 		}
 	}

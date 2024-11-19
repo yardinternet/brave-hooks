@@ -1,0 +1,1 @@
+{{ BraveHooks::getQuote() }}

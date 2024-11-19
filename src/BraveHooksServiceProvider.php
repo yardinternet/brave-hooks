@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Yard\SkeletonPackage;
+namespace Yard\BraveHooks;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Yard\SkeletonPackage\Console\ExampleCommand;
+use Yard\BraveHooks\Console\BraveHooksCommand;
 
-class SkeletonPackageServiceProvider extends PackageServiceProvider
+class BraveHooksServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
         $package
-            ->name('skeleton-package')
+            ->name('brave-hooks')
             ->hasConfigFile()
             ->hasViews()
-            ->hasCommand(ExampleCommand::class);
+            ->hasCommand(BraveHooksCommand::class);
     }
 
     public function packageRegistered(): void
     {
-        $this->app->singleton('Example', fn () => new Example($this->app));
+        $this->app->singleton('BraveHooks', fn () => new BraveHooks($this->app));
     }
 
     public function packageBooted(): void
     {
-        $this->app->make('Example');
+        $this->app->make('BraveHooks');
     }
 }
