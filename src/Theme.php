@@ -25,20 +25,6 @@ class Theme
         return 20;
     }
 
-    #[Filter('map_meta_cap', 1)]
-    public function allowUnfilteredHtml(array $caps, string $cap, int $userId): array
-    {
-        if (! is_multisite()) {
-            return $caps;
-        }
-
-        if ('unfiltered_html' === $cap && (user_can($userId, 'yard_unfiltered_html_multisite'))) {
-            $caps = ['unfiltered_html'];
-        }
-
-        return $caps;
-    }
-
     #[Action('init')]
     public function enableExcerptForPage(): void
     {
