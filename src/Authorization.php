@@ -63,4 +63,49 @@ class Authorization
             exit;
         }
     }
+
+    #[Action('pre_get_users')]
+    public function hideAdminsFromNonAdmins($args): void
+    {
+        if (current_user_can('administrator')) {
+            return;
+        }
+
+        if (! \is_admin()) {
+            return;
+        }
+
+        if (get_current_screen()?->id !== 'users') {
+            return;
+        }
+
+        if (! isset($args->query_vars['exclude'])) {
+            return;
+        }
+
+        $args->query_vars['role__not_in'] = 'administrator';
+    }
+
+
+    #[Filter('views_users')]
+    public function hideAdminCountFromNonAdmins($views)
+    {
+        if (current_user_can('administrator')) {
+            return $views;
+        }
+
+        preg_match('/\((\d+)\)/', $views['administrator'], $adminCount);
+        preg_match('/\((\d+)\)/', $views['all'], $allUsersCount);
+
+        $newAllUsersCount = $allUsersCount[1] - $adminCount[1];
+
+        $views['all'] = preg_replace('/\(\d+\)/', (string) $newAllUsersCount, $views['all']);
+
+        if (isset($views['administrator'])) {
+            unset($views['administrator']);
+        }
+
+        return $views;
+    }
+
 }
