@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yard\Brave\Hooks;
 
 use Illuminate\Http\Request;
+use SearchWP\Highlighter;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
@@ -29,10 +30,10 @@ class FacetWP
 			return $output;
 		}
 
-		$highlighter = new \SearchWP\Highlighter();
+		$highlighter = new Highlighter();
 		$needle = sanitize_text_field($_GET['_zoeken']);
 
-		if ($highlighter instanceof \SearchWP\Highlighter && ! empty($needle)) {
+		if ($highlighter instanceof Highlighter && ! empty($needle)) {
 			$output['template'] = $highlighter->apply($output['template'], $needle);
 		}
 
