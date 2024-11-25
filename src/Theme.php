@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yard\Brave\Hooks;
 
+use DOMDocument;
 use Yard\Brave\Hooks\Traits\ParentPage;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
