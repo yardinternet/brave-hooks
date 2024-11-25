@@ -9,31 +9,31 @@ use Yard\Hook\Filter;
 
 class SEOPress
 {
-    use ParentPage;
+	use ParentPage;
 
-    #[Filter('seopress_pro_breadcrumbs_crumbs')]
-    public function addBreadcrumb(array $breadcrumbs): array
-    {
-        if (! $this->hasParentPage(get_the_ID()) || is_search()) {
-            return $breadcrumbs;
-        }
+	#[Filter('seopress_pro_breadcrumbs_crumbs')]
+	public function addBreadcrumb(array $breadcrumbs): array
+	{
+		if (! $this->hasParentPage(get_the_ID()) || is_search()) {
+			return $breadcrumbs;
+		}
 
-        $parentIds = $this->getParentPagesIds(get_the_ID());
-        if (empty($parentIds)) {
-            return $breadcrumbs;
-        }
+		$parentIds = $this->getParentPagesIds(get_the_ID());
+		if (empty($parentIds)) {
+			return $breadcrumbs;
+		}
 
-        $parentBreadcrumbs = array_map(
-            fn (int $id): array => [get_the_title($id), get_the_permalink($id)],
-            array_reverse($parentIds)
-        );
-        array_splice(
-            $breadcrumbs,
-            1,
-            0,
-            $parentBreadcrumbs
-        );
+		$parentBreadcrumbs = array_map(
+			fn (int $id): array => [get_the_title($id), get_the_permalink($id)],
+			array_reverse($parentIds)
+		);
+		array_splice(
+			$breadcrumbs,
+			1,
+			0,
+			$parentBreadcrumbs
+		);
 
-        return $breadcrumbs;
-    }
+		return $breadcrumbs;
+	}
 }

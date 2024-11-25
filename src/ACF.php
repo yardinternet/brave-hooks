@@ -8,9 +8,9 @@ use Yard\Hook\Filter;
 
 class ACF
 {
-    #[Filter('acf/settings/enable_post_types')]
-    public function enablePostTypes(): bool
-    {
-        return false;
-    }
+	#[Filter('acf/settings/enable_post_types')]
+	public function enablePostTypes(): bool
+	{
+		return false;
+	}
 }
