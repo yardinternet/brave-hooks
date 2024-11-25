@@ -79,10 +79,6 @@ class Authorization
             return;
         }
 
-        if (! isset($args->query_vars['exclude'])) {
-            return;
-        }
-
         $args->query_vars['role__not_in'] = 'administrator';
     }
 
