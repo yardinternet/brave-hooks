@@ -1,4 +1,4 @@
-# Yard brave-hooks
+# brave-hooks
 
 [![Code Style](https://github.com/yardinternet/brave-hooks/actions/workflows/format-php.yml/badge.svg?no-cache)](https://github.com/yardinternet/brave-hooks/actions/workflows/format-php.yml)
 
