@@ -39,8 +39,8 @@ class GravityForms
 	public function useDefaultTheme(): string
 	{
 		if (\is_admin()) {
-            return '';
-        }
+			return '';
+		}
 
 		return 'gravity-theme';
 	}
