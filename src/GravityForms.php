@@ -73,7 +73,7 @@ class GravityForms
 		}
 
 		$startTag = '</form>';
-		$disclaimer = '<p class="text-xs sm:text-sm text-gray-500">Dit formulier is beveiligd met reCAPTCHA. Het <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer nofollow">privacybeleid<span class="sr-only">(opent in nieuw tabblad)</span></a> en de <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer nofollow">servicevoorwaarden<span class="sr-only">(opent in nieuw tabblad)</span></a> van Google zijn van toepassing.</p>';
+		$disclaimer = '<p class="gform-recaptcha-disclaimer text-xs sm:text-sm text-gray-500">Dit formulier is beveiligd met reCAPTCHA. Het <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer nofollow">privacybeleid<span class="sr-only">(opent in nieuw tabblad)</span></a> en de <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer nofollow">servicevoorwaarden<span class="sr-only">(opent in nieuw tabblad)</span></a> van Google zijn van toepassing.</p>';
 
 		return str_replace($startTag, $startTag . $disclaimer, $formString);
 	}
