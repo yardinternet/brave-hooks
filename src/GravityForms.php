@@ -38,6 +38,10 @@ class GravityForms
 	#[Filter('gform_form_theme_slug')]
 	public function useDefaultTheme(): string
 	{
+		if (\is_admin()) {
+            return '';
+        }
+
 		return 'gravity-theme';
 	}
 
