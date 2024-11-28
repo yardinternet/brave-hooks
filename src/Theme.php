@@ -42,6 +42,14 @@ class Theme
 			$classes[] = 'has-top-bar';
 		}
 
+		if (isset($_COOKIE['a11y-toolbar-contrast']) && 'true' === $_COOKIE['a11y-toolbar-contrast']) {
+			$classes[] = 'a11y-toolbar--contrast';
+		}
+
+		if (isset($_COOKIE['a11y-toolbar-text-size']) && 'true' === $_COOKIE['a11y-toolbar-text-size']) {
+			$classes[] = 'a11y-toolbar--text-size';
+		}
+
 		return $classes;
 	}
 
