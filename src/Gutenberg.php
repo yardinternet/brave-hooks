@@ -27,4 +27,12 @@ class Gutenberg
 			->values()
 			->all();
 	}
+
+	#[Filter('yard::gutenberg/allowed-blocks-whitelisted-prefixes')]
+	public function registerBlocksWhitelistedPrefixes(array $initialWhitelistedPrefixes): array
+	{
+		$allowedBlocksWhitelistedPrefixes = config('gutenberg.allowedBlocksWhitelistedPrefixes', []);
+
+		return array_merge($initialWhitelistedPrefixes, $allowedBlocksWhitelistedPrefixes);
+	}
 }
