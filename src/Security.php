@@ -13,12 +13,6 @@ class Security
 	#[Action('send_headers')]
 	public function sendHeaders(): void
 	{
-		if (! config('csp.enabled')) {
-			return;
-		}
-
-		$policy = PolicyFactory::create(config('csp.policy'));
-
 		// Force client-side TLS (Transport Layer Security) redirection.
 		header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
 
@@ -33,8 +27,17 @@ class Security
 
 		// Disable unused device permissions
 		header('Permissions-Policy: accelerometer=(),autoplay=(self),camera=(),display-capture=(),encrypted-media=(),fullscreen=(*),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),midi=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),screen-wake-lock=(),sync-xhr=(self),usb=(),xr-spatial-tracking=()');
+	}
 
-		// Add Content-Security-Policy
+	#[Action('send_headers')]
+	public function sendScpHeader(): void
+	{
+		if (! config('csp.enabled')) {
+			return;
+		}
+
+		$policy = PolicyFactory::create(config('csp.policy'));
+
 		header(sprintf('%s: %s', $policy->prepareHeader(), $policy->__toString()), true);
 	}
 
