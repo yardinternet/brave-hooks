@@ -2725,29 +2725,29 @@
         },
         {
             "name": "yard/wp-hook-registrar",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yardinternet/wp-hook-registrar.git",
-                "reference": "673305a65cda3da3fd231a1c847341e2d340dedd"
+                "reference": "c56ffde0d0a1efb064985886b8e361df8c3c7288"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yardinternet/wp-hook-registrar/zipball/673305a65cda3da3fd231a1c847341e2d340dedd",
-                "reference": "673305a65cda3da3fd231a1c847341e2d340dedd",
+                "url": "https://api.github.com/repos/yardinternet/wp-hook-registrar/zipball/c56ffde0d0a1efb064985886b8e361df8c3c7288",
+                "reference": "c56ffde0d0a1efb064985886b8e361df8c3c7288",
                 "shasum": ""
             },
             "require": {
-                "php": "8.1.*",
+                "php": ">=8.1",
                 "spatie/laravel-package-tools": "^1.16"
             },
             "require-dev": {
                 "10up/wp_mock": "^0.4.2",
-                "friendsofphp/php-cs-fixer": "^3.58",
                 "larastan/larastan": "^2.0",
                 "orchestra/testbench": "^8.23",
                 "pestphp/pest": "^2.34",
-                "szepeviktor/phpstan-wordpress": "^1.0"
+                "szepeviktor/phpstan-wordpress": "^1.0",
+                "yard/php-cs-fixer-rules": "^1.0"
             },
             "type": "package",
             "extra": {
@@ -2769,9 +2769,9 @@
             "description": "An Acorn package for WordPress hook registration.",
             "support": {
                 "issues": "https://github.com/yardinternet/wp-hook-registrar/issues",
-                "source": "https://github.com/yardinternet/wp-hook-registrar/tree/v1.0.1"
+                "source": "https://github.com/yardinternet/wp-hook-registrar/tree/v1.0.2"
             },
-            "time": "2024-11-19T21:21:35+00:00"
+            "time": "2024-12-06T21:53:16+00:00"
         }
     ],
     "packages-dev": [
@@ -7662,22 +7662,22 @@
         },
         {
             "name": "yard/php-cs-fixer-rules",
-            "version": "v1.0.2",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yardinternet/php-cs-fixer-rules.git",
-                "reference": "13dc2e5459c07ce7ff80c8e89641eaef271c1d58"
+                "reference": "11a1736163ecc9dbe077fdbd6f1c4232435e2268"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yardinternet/php-cs-fixer-rules/zipball/13dc2e5459c07ce7ff80c8e89641eaef271c1d58",
-                "reference": "13dc2e5459c07ce7ff80c8e89641eaef271c1d58",
+                "url": "https://api.github.com/repos/yardinternet/php-cs-fixer-rules/zipball/11a1736163ecc9dbe077fdbd6f1c4232435e2268",
+                "reference": "11a1736163ecc9dbe077fdbd6f1c4232435e2268",
                 "shasum": ""
             },
             "require": {
                 "ckr/arraymerger": "^3.0",
                 "friendsofphp/php-cs-fixer": "^3.64",
-                "php": ">=8.1",
+                "php": ">=7.4",
                 "webmozart/assert": "^1.11"
             },
             "require-dev": {
@@ -7697,9 +7697,9 @@
             "description": "Yard PHP CS Fixer rules",
             "support": {
                 "issues": "https://github.com/yardinternet/php-cs-fixer-rules/issues",
-                "source": "https://github.com/yardinternet/php-cs-fixer-rules/tree/v1.0.2"
+                "source": "https://github.com/yardinternet/php-cs-fixer-rules/tree/v1.0.4"
             },
-            "time": "2024-11-20T14:32:21+00:00"
+            "time": "2024-12-05T13:48:24+00:00"
         }
     ],
     "aliases": [],
