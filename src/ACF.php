@@ -21,4 +21,18 @@ class ACF
 
 		return $api;
 	}
+
+	#[Filter('acf/settings/load_json')]
+	public function loadJson(array $paths): array
+	{
+		$paths[] = get_template_directory() . '/acf-json';
+
+		return $paths;
+	}
+
+	#[Filter('acf/settings/save_json')]
+	public function saveJson(string $path): string
+	{
+		return get_template_directory() . '/acf-json';
+	}
 }
