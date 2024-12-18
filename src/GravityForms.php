@@ -113,19 +113,17 @@ class GravityForms
 			return;
 		}
 
-		?>
-			<script>
-				window.addEventListener('DOMContentLoaded', function() {
-					const eventSelect = document.querySelectorAll('[name="_gform_setting_event"');
+		wp_print_inline_script_tag("
+			window.addEventListener('DOMContentLoaded', function() {
+				const eventSelect = document.querySelectorAll('[name=\"_gform_setting_event\"');
 
-					if (!eventSelect.length) {
-						return;
-					}
+				if (!eventSelect.length) {
+					return;
+				}
 
-					eventSelect[0].setAttribute('id', 'event');
-				});
-			</script>
-		<?php
+				eventSelect[0].setAttribute('id', 'event');
+			});"
+		);
 	}
 
 	#[Action('gform_after_save_form')]
