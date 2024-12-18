@@ -113,7 +113,8 @@ class GravityForms
 			return;
 		}
 
-		wp_print_inline_script_tag("
+		wp_print_inline_script_tag(
+			"
 			window.addEventListener('DOMContentLoaded', function() {
 				const eventSelect = document.querySelectorAll('[name=\"_gform_setting_event\"');
 
