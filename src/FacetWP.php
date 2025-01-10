@@ -90,4 +90,10 @@ class FacetWP
 
 		return $settings['settings']['prefix'] ?? '';
 	}
+
+	#[Filter('facetwp_gmaps_api_key')]
+	public function setGoogleMapsApiKey(): string
+	{
+		return env('GOOGLE_MAPS_API_KEY', '');
+	}
 }
