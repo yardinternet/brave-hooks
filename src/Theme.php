@@ -141,4 +141,52 @@ class Theme
 
 		return $doc->saveHTML();
 	}
+
+	/**
+	 * Adds sr-only span to to target="_blank" links.
+	 */
+	#[Filter('the_content')]
+	public function addSrOnlyTextToNewTabLinks(string $content): string
+	{
+		if (empty($content)) {
+			return $content;
+		}
+
+		$doc = new DOMDocument();
+		libxml_use_internal_errors(true);
+		if (! $doc->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
+			libxml_clear_errors();
+
+			return $content; // Return original HTML if loading fails
+		}
+		libxml_clear_errors();
+
+		$links = $doc->getElementsByTagName('a');
+
+		foreach ($links as $link) {
+			if ($link->hasAttribute('target') && $link->getAttribute('target') === '_blank') {
+				$existingSpan = $link->getElementsByTagName('span'); // Avoid duplicate spans by checking if a span already exists.
+				$spanAlreadyExists = false;
+
+				foreach ($existingSpan as $span) {
+					if ($span->getAttribute('class') === 'sr-only') {
+						$spanAlreadyExists = true;
+						break;
+					}
+				}
+
+				if (! $spanAlreadyExists) {
+					$srOnlySpan = $doc->createElement('span', ' (opent in nieuw tabblad)');
+					$srOnlySpan->setAttribute('class', 'sr-only');
+					$link->appendChild($srOnlySpan);
+				}
+			}
+		}
+
+		$modifiedContent = $doc->saveHTML();
+
+		libxml_clear_errors();
+
+		return $modifiedContent;
+	}
 }
