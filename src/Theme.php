@@ -171,6 +171,7 @@ class Theme
 				foreach ($existingSpan as $span) {
 					if ($span->getAttribute('class') === 'sr-only') {
 						$spanAlreadyExists = true;
+
 						break;
 					}
 				}

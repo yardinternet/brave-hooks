@@ -143,8 +143,6 @@ class GravityForms
 		);
 	}
 
-
-
 	#[Action('gform_after_save_form')]
 	public function defaultSettings(array $form): void
 	{
