@@ -104,6 +104,22 @@ class GravityForms
 	}
 
 	/**
+	 * A11y: change default required field message to something more descriptive.
+	 */
+	#[Filter('gform_field_validation')]
+	public function changeRequiredFieldValidationMessage(array $result, string|array $value, $form, $field): array
+	{
+		$label = isset($field['label']) && is_string($field['label']) ? $field['label'] : '';
+		$result['message'] = str_replace(
+			'Dit veld is vereist',
+			'Het verplichte veld "' . $label . '" is niet ingevuld',
+			$result['message']
+		);
+
+		return $result;
+	}
+
+	/**
 	 * Fixes the GF merge tags for notifications.
 	 */
 	#[Action('admin_head')]
@@ -126,6 +142,8 @@ class GravityForms
 			});"
 		);
 	}
+
+
 
 	#[Action('gform_after_save_form')]
 	public function defaultSettings(array $form): void

@@ -96,4 +96,22 @@ class FacetWP
 	{
 		return env('GOOGLE_MAPS_API_KEY', '');
 	}
+
+	#[Filter('gettext_fwp-front')]
+	public function translatePagerLabels(string $translation): string
+    {
+        if ('Go to page' === $translation) {
+            $translation = 'Ga naar pagina';
+        }
+
+        if ('Go to next page' === $translation) {
+            $translation = 'Ga naar de volgende pagina';
+        }
+
+        if ('Go to previous page' === $translation) {
+            $translation = 'Ga naar de vorige pagina';
+        }
+
+        return $translation;
+    }
 }
