@@ -114,4 +114,35 @@ class FacetWP
 
         return $translation;
     }
+
+	/**
+	 * Change pager wrapper from <div> to <ul>
+	 */
+	#[Filter('facetwp_facet_html')]
+	public function changePagerWrapperTag(string $html, array $params): string
+	{
+		if (isset($params['facet']['type']) && 'pager' === $params['facet']['type'] && 'numbers' === $params['facet']['pager_type']) {
+			$html = str_replace('<div class="facetwp-pager"', '<ul class="facetwp-pager list-none pl-0 mb-0"', $html);
+		}
+
+		return $html;
+	}
+
+	/**
+	 * A11y: Change the pager links
+	 */
+	#[Filter('facetwp_facet_pager_link')]
+	public function changePagerLinks(string $html, array $params): string
+	{
+		// Wrap links with <li>
+		$html = str_replace([ '<a', '/a>' ], [ '<li><a', '/a></li>' ], $html);
+
+		// Modify dots to be non-interactive <span>
+		if ('dots' === $params['extra_class']) {
+			$html = str_replace('facetwp-page ', 'facetwp-page-', $html); // Disable facetwp_load_a11y changes
+			$html = str_replace([ '<a', '/a>' ], [ '<span aria-hidden="true"', '/span>' ], $html);
+		}
+
+		return $html;
+	}
 }
