@@ -112,8 +112,8 @@ class FacetWP
 			$translation = 'Ga naar de vorige pagina';
 		}
 
-        return $translation;
-    }
+		return $translation;
+	}
 
 	/**
 	 * Change pager wrapper from <div> to <ul>
