@@ -154,40 +154,32 @@ class Theme
 
 		$doc = new DOMDocument();
 		libxml_use_internal_errors(true);
+
 		if (! $doc->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
 			libxml_clear_errors();
 
 			return $content; // Return original HTML if loading fails
 		}
 		libxml_clear_errors();
-
 		$links = $doc->getElementsByTagName('a');
 
 		foreach ($links as $link) {
-			if ($link->hasAttribute('target') && $link->getAttribute('target') === '_blank') {
-				$existingSpan = $link->getElementsByTagName('span'); // Avoid duplicate spans by checking if a span already exists.
-				$spanAlreadyExists = false;
+			if (! $link->hasAttribute('target') || $link->getAttribute('target') !== '_blank') {
+				continue; // Skip links without target="_blank"
+			}
 
-				foreach ($existingSpan as $span) {
-					if ($span->getAttribute('class') === 'sr-only') {
-						$spanAlreadyExists = true;
-
-						break;
-					}
-				}
-
-				if (! $spanAlreadyExists) {
-					$srOnlySpan = $doc->createElement('span', ' (opent in nieuw tabblad)');
-					$srOnlySpan->setAttribute('class', 'sr-only');
-					$link->appendChild($srOnlySpan);
+			$existingSpan = $link->getElementsByTagName('span');
+			foreach ($existingSpan as $span) {
+				if ($span->getAttribute('class') === 'sr-only') {
+					continue 2; // Skip if an sr-only span already exists
 				}
 			}
+
+			$srOnlySpan = $doc->createElement('span', ' (opent in nieuw tabblad)');
+			$srOnlySpan->setAttribute('class', 'sr-only');
+			$link->appendChild($srOnlySpan);
 		}
 
-		$modifiedContent = $doc->saveHTML();
-
-		libxml_clear_errors();
-
-		return $modifiedContent;
+		return $doc->saveHTML();
 	}
 }

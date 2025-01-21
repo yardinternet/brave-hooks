@@ -98,31 +98,25 @@ class FacetWP
 	}
 
 	#[Filter('gettext_fwp-front')]
-	public function translatePagerLabels(string $translation): string
+	public function translatePagerLabels(string $translation, string $text): string
 	{
-		if ('Go to page' === $translation) {
-			$translation = 'Ga naar pagina';
-		}
-
-		if ('Go to next page' === $translation) {
-			$translation = 'Ga naar de volgende pagina';
-		}
-
-		if ('Go to previous page' === $translation) {
-			$translation = 'Ga naar de vorige pagina';
-		}
-
-		return $translation;
+		return match($text) {
+			'Go to page' => 'Ga naar pagina',
+			'Go to next page' => 'Ga naar de volgende pagina',
+			'Go to previous page' => 'Ga naar de vorige pagina',
+			default => $translation,
+		};
 	}
 
 	/**
-	 * Change pager wrapper from <div> to <ul>
+	 * A11y: Change pager wrapper from <div> to <ul>
 	 */
 	#[Filter('facetwp_facet_html')]
 	public function changePagerWrapperTag(string $html, array $params): string
 	{
 		if (isset($params['facet']['type']) && 'pager' === $params['facet']['type'] && 'numbers' === $params['facet']['pager_type']) {
 			$html = str_replace('<div class="facetwp-pager"', '<ul class="facetwp-pager list-none pl-0 mb-0"', $html);
+			$html = str_replace('</div>', '</ul>', $html);
 		}
 
 		return $html;
