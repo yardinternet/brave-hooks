@@ -107,12 +107,12 @@ class GravityForms
 	 * A11y: change default required field message to something more descriptive.
 	 */
 	#[Filter('gform_field_validation')]
-	public function changeRequiredFieldValidationMessage(array $result, string|array $value, $form, $field): array
+	public function changeRequiredFieldValidationMessage(array $result, string|array $value, array $form, \GF_Field $field): array
 	{
 		$label = isset($field['label']) && is_string($field['label']) ? $field['label'] : '';
 		$result['message'] = str_replace(
 			'Dit veld is vereist',
-			'Het verplichte veld "' . $label . '" is niet ingevuld',
+			sprintf('Het verplichte veld "%s" is niet ingevuld', $label),
 			$result['message']
 		);
 
