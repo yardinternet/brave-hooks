@@ -13,6 +13,17 @@ class Theme
 {
 	use ParentPage;
 
+	/**
+	 * Disable WordPress from changing smilies (also known as smileys) into emojis.
+	 *
+	 * @see https://developer.wordpress.org/reference/functions/convert_smilies/
+	 */
+	#[Action('wp_loaded')]
+	public function removeConvertSmiliesFilter(): void
+	{
+		remove_filter('the_content', 'convert_smilies', 20);
+	}
+
 	#[Filter('excerpt_more')]
 	public function excerptMore(): string
 	{
