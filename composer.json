@@ -12,6 +12,10 @@
 		},
 		"sort-packages": true
 	},
+	"support": {
+		"source": "https://github.com/yardinternet/brave-hooks",
+		"issues": "https://github.com/yardinternet/brave-hooks/issues"
+	},
 	"require": {
 		"php": ">=8.1",
 		"yard/wp-hook-registrar": "^1.0",
@@ -34,6 +38,11 @@
 		}
 	},
 	"scripts": {
+		"all": [
+			"@test",
+			"@analyse",
+			"@format"
+		],
 		"analyse": "vendor/bin/phpstan analyse --debug --memory-limit 1G",
 		"format": "vendor/bin/php-cs-fixer fix",
 		"test": "vendor/bin/pest",
