@@ -166,7 +166,8 @@ class Theme
 		$doc = new DOMDocument();
 		libxml_use_internal_errors(true);
 
-		if (! $doc->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
+		// Wrap content in a dummy <div> for fragment safety
+		if (! $doc->loadHTML('<div>' . $content . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
 			libxml_clear_errors();
 
 			return $content; // Return original HTML if loading fails
@@ -191,6 +192,25 @@ class Theme
 			$link->appendChild($srOnlySpan);
 		}
 
-		return $doc->saveHTML();
+		$newContent = $this->removeOuterDiv($doc);
+
+		return '' === $newContent ? $content : $newContent;
+	}
+
+	private function removeOuterDiv(DOMDocument $doc): string
+	{
+		$body = $doc->getElementsByTagName('div')->item(0);
+
+		if (null === $body) {
+			return '';
+		}
+
+		$newContent = '';
+
+		foreach ($body->childNodes as $child) {
+			$newContent .= $doc->saveHTML($child) ?: '';
+		}
+
+		return $newContent;
 	}
 }
