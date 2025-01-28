@@ -18,6 +18,9 @@
 	},
 	"require": {
 		"php": ">=8.1",
+		"ext-dom": "*",
+		"ext-libxml": ">=8.1",
+		"lib-libxml": ">=2.9",
 		"yard/wp-hook-registrar": "^1.0",
 		"spatie/laravel-csp": "^2.0"
 	},

@@ -187,7 +187,12 @@ class Theme
 				}
 			}
 
-			$srOnlySpan = $doc->createElement('span', ' (opent in nieuw tabblad)');
+			try {
+				$srOnlySpan = $doc->createElement('span', ' (opent in nieuw tabblad)');
+			} catch (\DOMException $e) {
+				continue;
+			}
+
 			$srOnlySpan->setAttribute('class', 'sr-only');
 			$link->appendChild($srOnlySpan);
 		}
@@ -197,6 +202,9 @@ class Theme
 		return '' === $newContent ? $content : $newContent;
 	}
 
+	/**
+	 * Remove the outer div that was added for fragment safety.
+	 */
 	private function removeOuterDiv(DOMDocument $doc): string
 	{
 		$body = $doc->getElementsByTagName('div')->item(0);
