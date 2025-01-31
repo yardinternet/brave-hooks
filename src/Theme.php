@@ -154,7 +154,7 @@ class Theme
 	}
 
 	/**
-	 * Adds sr-only span to to target="_blank" links.
+	 * Adds sr-only span to target="_blank" links.
 	 */
 	#[Filter('the_content')]
 	public function addSrOnlyTextToNewTabLinks(string $content): string
@@ -167,7 +167,12 @@ class Theme
 		libxml_use_internal_errors(true);
 
 		// Wrap content in a dummy <div> for fragment safety
-		if (! $doc->loadHTML('<div>' . $content . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
+		$html = '<div>' . $content . '</div>';
+
+		// Set the encoding to UTF-8 to prevent encoding issues
+		$html = '<?xml encoding="UTF-8">' . $html;
+
+		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
 			libxml_clear_errors();
 
 			return $content; // Return original HTML if loading fails
