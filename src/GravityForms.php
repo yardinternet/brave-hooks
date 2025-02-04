@@ -113,7 +113,7 @@ class GravityForms
 		$result['message'] = str_replace(
 			'Dit veld is vereist',
 			sprintf('Het verplichte veld "%s" is niet ingevuld', $label),
-			$result['message']
+			$result['message'] ?? sprintf('Het verplichte veld "%s" is niet ingevuld', $label)
 		);
 
 		return $result;
