@@ -21,11 +21,34 @@ class Elasticsearch
 			return;
 		}
 
-		$searchQuery = sanitize_text_field(get_query_var('s'));
+		$searchTerm = sanitize_text_field(get_query_var('s'));
 
-		// Wrap the search query in quotes
-		$searchQuery = '"' . str_replace(['\\', '"'], '', $searchQuery) . '"';
+		$this->redirect($this->wrapInQuotes($searchTerm));
+	}
 
+	#[Action('template_redirect')]
+	public function wrapSearchParameterInQuotes(): void
+	{
+		if (! is_search() || is_admin()) {
+			return;
+		}
+
+		if (str_starts_with($_GET['q'], '\"') && str_ends_with($_GET['q'], '\"')) {
+			return;
+		}
+
+		$searchTerm = sanitize_text_field($_GET['q']);
+
+		$this->redirect($this->wrapInQuotes($searchTerm));
+	}
+
+	private function wrapInQuotes(string $searchQuery): string
+	{
+		return '"' . str_replace(['\\', '"'], '', $searchQuery) . '"';
+	}
+
+	private function redirect(string $searchQuery): void
+	{
 		wp_safe_redirect(home_url('/zoeken?q=' . urlencode($searchQuery)));
 		exit;
 	}
