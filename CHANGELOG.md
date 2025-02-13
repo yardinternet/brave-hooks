@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.0.12 - 2025-02-13
+
+- Fix: always load acf json from parent
+
 ## v1.0.11 - 2025-02-04
 
 - Fix: undefined array key in 'gform_field_validation' hook
