@@ -143,6 +143,16 @@ class GravityForms
 		);
 	}
 
+	#[Filter('gform_form_block_attributes')]
+	public function changeGformBlockAttributes(array $attributes): array
+	{
+		$attributes['ajax']['default'] = true;
+		$attributes['title']['default'] = false;
+		$attributes['description']['default'] = false;
+
+		return $attributes;
+	}
+
 	#[Action('gform_after_save_form')]
 	public function defaultSettings(array $form): void
 	{
