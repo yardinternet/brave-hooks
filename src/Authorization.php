@@ -23,6 +23,21 @@ class Authorization
 		return $caps;
 	}
 
+	#[Filter('map_meta_cap', 1)]
+	public function editPrivacyPolicy(array $caps, string $cap, int $userId): array
+	{
+		if (! is_user_logged_in()) {
+			return $caps;
+		}
+
+		if ('manage_privacy_options' === $cap && (user_can($userId, 'yard_edit_privacy_policy'))) {
+			$manageCap = is_multisite() ? 'manage_network' : 'manage_options';
+			$caps = array_diff($caps, [ $manageCap ]);
+		}
+
+		return $caps;
+	}
+
 	#[Filter('show_admin_bar')]
 	public function hideAdminBar(bool $show): bool
 	{
