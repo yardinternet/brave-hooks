@@ -263,6 +263,4 @@ class GravityForms
 
 		return $form;
 	}
-
-
 }
