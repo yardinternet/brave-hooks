@@ -147,8 +147,6 @@ class GravityForms
 	public function changeGformBlockAttributes(array $attributes): array
 	{
 		$attributes['ajax']['default'] = true;
-		$attributes['title']['default'] = false;
-		$attributes['description']['default'] = false;
 
 		return $attributes;
 	}
