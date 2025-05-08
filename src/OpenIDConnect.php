@@ -8,6 +8,26 @@ use Yard\Hook\Filter;
 
 class OpenIDConnect
 {
+	#[Filter('allow_password_reset')]
+	public function disablePasswordReset(bool $allowPasswordReset, int $userId): bool
+	{
+		if (get_user_meta($userId, 'openid-connect-generic-subject-identity', true)) {
+			$allowPasswordReset = false;
+		}
+
+		return $allowPasswordReset;
+	}
+
+	#[Filter('wp_authenticate_user')]
+	public function disableLogin(\WP_User|\WP_Error $user, string $password): \WP_User|\WP_Error
+	{
+		if (is_a($user, \WP_User::class) && get_user_meta($user->ID, 'openid-connect-generic-subject-identity', true)) {
+			$user = new \WP_Error('password_login_disabled', __('Inloggen met wachtwoord is niet toegestaan voor deze gebruiker'));
+		}
+
+		return $user;
+	}
+
 	#[Filter('site_url')]
 	public function setCorrectRedirectUrl(string $url): string
 	{
@@ -15,23 +35,15 @@ class OpenIDConnect
 		return str_replace('/wp/openid-connect-authorize', '/openid-connect-authorize', $url);
 	}
 
-	#[Filter('openid-connect-generic-alter-user-claim')]
-	public function alterUserClaim(array $claim): array
+	#[Filter('openid-connect-generic-client-redirect-to')]
+	public function setRedirectTo(): string
 	{
-		if (isset($claim['emails']) && wp_is_numeric_array($claim['emails'])) {
-			$claim['email'] = $claim['emails'][0];
+		$redirectTo = home_url();
+		$referer = wp_get_referer();
+		if (false !== $referer) {
+			$redirectTo = $referer;
 		}
 
-		return $claim;
-	}
-
-	#[Filter('openid-connect-generic-auth-url')]
-	public function setAuthUrl(string $url): string
-	{
-		return add_query_arg(
-			'prompt',
-			'login',
-			$url
-		);
+		return $redirectTo;
 	}
 }
