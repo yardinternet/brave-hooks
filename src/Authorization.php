@@ -38,6 +38,24 @@ class Authorization
 		return $caps;
 	}
 
+	#[Filter('map_meta_cap', 1)]
+	public function addCapabilityForEditingAttachments($caps, $cap, $userId, $args)
+	{
+		if ('edit_post' === $cap && isset($args[0])) {
+			$post = get_post($args[0]);
+
+			if (is_a($post, 'WP_Post') && 'attachment' === $post->post_type) {
+				if ((int) $post->post_author === (int) $userId) {
+					return ['yard_edit_attachments'];
+				} else {
+					return $caps;
+				}
+			}
+		}
+
+		return $caps;
+	}
+
 	#[Filter('show_admin_bar')]
 	public function hideAdminBar(bool $show): bool
 	{
