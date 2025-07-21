@@ -49,4 +49,60 @@ class Security
 
 		return $attributes;
 	}
+
+	#[Filter('wpmu_signup_user_notification')]
+	public function newUserCreation(string $userLogin, string $userEmail, string $key): void
+	{
+		wpmu_activate_signup($key);
+
+		$siteName = get_bloginfo('name');
+		$resetKey = $this->requestPasswordReset($userLogin);
+		$resetUrl = network_site_url("wp-login.php?action=rp&key=$resetKey&login=$userLogin");
+
+		$subject = sprintf(
+			'Welkom bij %s, %s!',
+			$siteName,
+			$userLogin
+		);
+
+		$messageTemplate = <<<EOT
+			Welkom %s,
+
+			Je nieuwe account is succesvol geactiveerd.
+
+			Ga naar: %s
+			Om een nieuw wachtwoord aan te maken en in te loggen.
+
+			Vanwege veiligheid is de bovenstaande link maar een korte tijd geldig.
+
+			Bedankt!
+			EOT;
+
+		$message = sprintf($messageTemplate, $userLogin, $resetUrl);
+
+		wp_mail($userEmail, $subject, $message);
+	}
+
+	#[Filter('wpmu_welcome_user_notification')]
+	public function disableWelcomeEmail(): bool
+	{
+		return false;
+	}
+
+	private function requestPasswordReset(string $userLogin): string
+	{
+		$user = get_user_by('login', $userLogin);
+
+		if (! $user) {
+			return '';
+		}
+
+		$resetKey = get_password_reset_key($user);
+
+		if (is_wp_error($resetKey)) {
+			return '';
+		}
+
+		return $resetKey;
+	}
 }
