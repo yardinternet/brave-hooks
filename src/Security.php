@@ -8,11 +8,9 @@ use Spatie\Csp\PolicyFactory;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
-class Security
-{
+class Security {
 	#[Action('send_headers')]
-	public function sendHeaders(): void
-	{
+	public function sendHeaders(): void {
 		// Force client-side TLS (Transport Layer Security) redirection.
 		header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
 
@@ -30,9 +28,8 @@ class Security
 	}
 
 	#[Action('send_headers')]
-	public function sendScpHeader(): void
-	{
-		if (! config('csp.enabled')) {
+	public function sendScpHeader(): void {
+		if (!config('csp.enabled')) {
 			return;
 		}
 
@@ -43,20 +40,18 @@ class Security
 
 	#[Filter('wp_script_attributes')]
 	#[Filter('wp_inline_script_attributes')]
-	public function addScriptNonce(array $attributes): array
-	{
+	public function addScriptNonce(array $attributes): array {
 		$attributes['nonce'] = csp_nonce();
 
 		return $attributes;
 	}
 
 	#[Filter('wpmu_signup_user_notification')]
-	public function newUserCreation(string $userLogin, string $userEmail, string $key): void
-	{
+	public function newUserCreation(string $userLogin, string $userEmail, string $key): void {
 		$activationResult = wpmu_activate_signup($key);
 
 		if (is_wp_error($activationResult)) {
-			logger($activationResult)->get_error_message();
+			Log::debug($activationResult->get_error_message());
 		}
 
 		$siteName = get_bloginfo('name');
@@ -88,16 +83,14 @@ class Security
 	}
 
 	#[Filter('wpmu_welcome_user_notification')]
-	public function disableWelcomeEmail(): bool
-	{
+	public function disableWelcomeEmail(): bool {
 		return false;
 	}
 
-	private function getPasswordResetKey(string $userLogin): string
-	{
+	private function getPasswordResetKey(string $userLogin): string {
 		$user = get_user_by('login', $userLogin);
 
-		if (! $user instanceof WP_User) {
+		if (!$user instanceof WP_User) {
 			return '';
 		}
 
