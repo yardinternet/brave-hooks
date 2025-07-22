@@ -53,11 +53,15 @@ class Security
 	#[Filter('wpmu_signup_user_notification')]
 	public function newUserCreation(string $userLogin, string $userEmail, string $key): void
 	{
-		wpmu_activate_signup($key);
+		$activationResult = wpmu_activate_signup($key);
+
+		if (is_wp_error($activationResult)) {
+			logger($activationResult)->get_error_message();
+		}
 
 		$siteName = get_bloginfo('name');
-		$resetKey = $this->requestPasswordReset($userLogin);
-		$resetUrl = network_site_url("wp-login.php?action=rp&key=$resetKey&login=$userLogin");
+		$resetKey = $this->getPasswordResetKey($userLogin);
+		$resetUrl = wp_login_url("?action=rp&key=$resetKey&login=$userLogin");
 
 		$subject = sprintf(
 			'Welkom bij %s, %s!',
@@ -89,11 +93,11 @@ class Security
 		return false;
 	}
 
-	private function requestPasswordReset(string $userLogin): string
+	private function getPasswordResetKey(string $userLogin): string
 	{
 		$user = get_user_by('login', $userLogin);
 
-		if (! $user) {
+		if (! $user instanceof WP_User) {
 			return '';
 		}
 
