@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yard\Brave\Hooks;
 
+use Illuminate\Support\Facades\Log;
 use Spatie\Csp\PolicyFactory;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
@@ -57,10 +58,19 @@ class Security
 
 		if (is_wp_error($activationResult)) {
 			Log::debug($activationResult->get_error_message());
+
+			return;
 		}
 
 		$siteName = get_bloginfo('name');
 		$resetKey = $this->getPasswordResetKey($userLogin);
+
+		if ('' === $resetKey) {
+			Log::debug('Password reset key could not be generated.');
+
+			return;
+		}
+
 		$resetUrl = wp_login_url("?action=rp&key=$resetKey&login=$userLogin");
 
 		$subject = sprintf(
@@ -84,13 +94,17 @@ class Security
 	{
 		$user = get_user_by('login', $userLogin);
 
-		if (! $user instanceof WP_User) {
+		if (! $user instanceof \WP_User) {
+			Log::debug('No user was found for login: ' . $userLogin);
+
 			return '';
 		}
 
 		$resetKey = get_password_reset_key($user);
 
 		if (is_wp_error($resetKey)) {
+			Log::debug($resetKey->get_error_message());
+
 			return '';
 		}
 
