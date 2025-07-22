@@ -8,9 +8,11 @@ use Spatie\Csp\PolicyFactory;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
-class Security {
+class Security
+{
 	#[Action('send_headers')]
-	public function sendHeaders(): void {
+	public function sendHeaders(): void
+	{
 		// Force client-side TLS (Transport Layer Security) redirection.
 		header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
 
@@ -28,8 +30,9 @@ class Security {
 	}
 
 	#[Action('send_headers')]
-	public function sendScpHeader(): void {
-		if (!config('csp.enabled')) {
+	public function sendScpHeader(): void
+	{
+		if (! config('csp.enabled')) {
 			return;
 		}
 
@@ -40,14 +43,16 @@ class Security {
 
 	#[Filter('wp_script_attributes')]
 	#[Filter('wp_inline_script_attributes')]
-	public function addScriptNonce(array $attributes): array {
+	public function addScriptNonce(array $attributes): array
+	{
 		$attributes['nonce'] = csp_nonce();
 
 		return $attributes;
 	}
 
 	#[Filter('wpmu_signup_user_notification')]
-	public function newUserCreation(string $userLogin, string $userEmail, string $key): void {
+	public function newUserCreation(string $userLogin, string $userEmail, string $key): void
+	{
 		$activationResult = wpmu_activate_signup($key);
 
 		if (is_wp_error($activationResult)) {
@@ -64,33 +69,22 @@ class Security {
 			$userLogin
 		);
 
-		$messageTemplate = <<<EOT
-			Welkom %s,
-
-			Je nieuwe account is succesvol geactiveerd.
-
-			Ga naar: %s
-			Om een nieuw wachtwoord aan te maken en in te loggen.
-
-			Vanwege veiligheid is de bovenstaande link maar een korte tijd geldig.
-
-			Bedankt!
-			EOT;
-
-		$message = sprintf($messageTemplate, $userLogin, $resetUrl);
+		$message = $this->composeEmail($userLogin, $resetUrl);
 
 		wp_mail($userEmail, $subject, $message);
 	}
 
 	#[Filter('wpmu_welcome_user_notification')]
-	public function disableWelcomeEmail(): bool {
+	public function disableWelcomeEmail(): bool
+	{
 		return false;
 	}
 
-	private function getPasswordResetKey(string $userLogin): string {
+	private function getPasswordResetKey(string $userLogin): string
+	{
 		$user = get_user_by('login', $userLogin);
 
-		if (!$user instanceof WP_User) {
+		if (! $user instanceof WP_User) {
 			return '';
 		}
 
@@ -101,5 +95,21 @@ class Security {
 		}
 
 		return $resetKey;
+	}
+
+	private function composeEmail(string $userLogin, string $resetUrl): string
+	{
+		return <<<EOT
+			Welkom $userLogin,
+
+			Je nieuwe account is succesvol geactiveerd.
+
+			Ga naar: $resetUrl
+			Om een nieuw wachtwoord aan te maken en in te loggen.
+
+			Vanwege veiligheid is de bovenstaande link maar een korte tijd geldig.
+
+			Bedankt!
+			EOT;
 	}
 }
