@@ -52,42 +52,75 @@ class Security
 	}
 
 	#[Filter('wpmu_signup_user_notification')]
-	public function newUserCreation(string $userLogin, string $userEmail, string $key): void
+	public function handleUserSignup(string $user_login, string $user_email, string $key, array $meta): bool
 	{
+		Log::debug('Handling new user signup for ' . $user_login . ' - activating user and disabling signup email');
+
 		$activationResult = wpmu_activate_signup($key);
 
 		if (is_wp_error($activationResult)) {
-			Log::debug($activationResult->get_error_message());
+			Log::debug('Activation failed: ' . $activationResult->get_error_message());
 
-			return;
+			return false;
 		}
 
-		$siteName = get_bloginfo('name');
-		$resetKey = $this->getPasswordResetKey($userLogin);
+		Log::debug('User ' . $user_login . ' activated successfully');
 
-		if ('' === $resetKey) {
-			Log::debug('Password reset key could not be generated.');
-
-			return;
-		}
-
-		$resetUrl = wp_login_url("?action=rp&key=$resetKey&login=$userLogin");
-
-		$subject = sprintf(
-			'Welkom bij %s, %s!',
-			$siteName,
-			$userLogin
-		);
-
-		$message = $this->composeEmail($userLogin, $resetUrl);
-
-		wp_mail($userEmail, $subject, $message);
+		return false;
 	}
 
 	#[Filter('wpmu_welcome_user_notification')]
-	public function disableWelcomeEmail(): bool
+	public function handleWelcomeEmail(int $user_id, string $password, array $meta): bool
 	{
-		return false;
+		$disableWelcomeEmail = isset($_REQUEST['disable_welcome_email']) && $_REQUEST['disable_welcome_email'];
+
+		if ($disableWelcomeEmail) {
+			Log::debug('Welcome email disabled by checkbox for user ID: ' . $user_id);
+
+			return false;
+		}
+
+		return true;
+	}
+
+	#[Filter('update_welcome_user_email')]
+	public function customizeWelcomeEmailContent(string $welcome_email, int $user_id, string $password, array $meta): string
+	{
+		$disableWelcomeEmail = isset($_REQUEST['disable_welcome_email']) && $_REQUEST['disable_welcome_email'];
+
+		if ($disableWelcomeEmail) {
+			return $welcome_email;
+		}
+
+		$user = get_userdata($user_id);
+		if (! $user) {
+			return $welcome_email;
+		}
+
+		$resetKey = $this->getPasswordResetKey($user->user_login);
+		if ('' === $resetKey) {
+			Log::debug('Password reset key could not be generated for welcome email.');
+
+			return $welcome_email;
+		}
+
+		$resetUrl = wp_login_url("?action=rp&key=$resetKey&login=$user->user_login");
+
+		return $this->composeEmail($user->user_login, $resetUrl);
+	}
+
+	#[Filter('update_welcome_user_subject')]
+	public function customizeWelcomeEmailSubject(string $subject): string
+	{
+		$disableWelcomeEmail = isset($_REQUEST['disable_welcome_email']) && $_REQUEST['disable_welcome_email'];
+
+		if ($disableWelcomeEmail) {
+			return $subject;
+		}
+
+		$siteName = get_bloginfo('name');
+
+		return sprintf('Welkom bij %s!', $siteName);
 	}
 
 	private function getPasswordResetKey(string $userLogin): string
@@ -114,16 +147,16 @@ class Security
 	private function composeEmail(string $userLogin, string $resetUrl): string
 	{
 		return <<<EOT
-			Welkom $userLogin,
+   Welkom $userLogin,
 
-			Je nieuwe account is succesvol geactiveerd.
+   Je nieuwe account is succesvol geactiveerd.
 
-			Ga naar: $resetUrl
-			Om een nieuw wachtwoord aan te maken en in te loggen.
+   Ga naar: $resetUrl
+   Om een nieuw wachtwoord aan te maken en in te loggen.
 
-			Vanwege veiligheid is de bovenstaande link maar een korte tijd geldig.
+   Vanwege veiligheid is de bovenstaande link maar een korte tijd geldig.
 
-			Bedankt!
-			EOT;
+   Bedankt!
+   EOT;
 	}
 }
