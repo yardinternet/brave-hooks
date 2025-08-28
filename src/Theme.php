@@ -174,6 +174,7 @@ class Theme
 
 		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
 			libxml_clear_errors();
+
 			return $content; // Return original HTML if loading fails
 		}
 		libxml_clear_errors();
@@ -190,6 +191,7 @@ class Theme
 					continue 2; // Skip if an sr-only span already exists
 				}
 			}
+
 			try {
 				$srOnlySpan = $doc->createElement('span', ' (opent in nieuw tabblad)');
 			} catch (\DOMException $e) {
@@ -200,7 +202,7 @@ class Theme
 		}
 
 		// Helper to replace tags with <span class="...">
-		$replaceTagWithSpan = function(string $tag, string $class) use ($doc) {
+		$replaceTagWithSpan = function (string $tag, string $class) use ($doc) {
 			$nodes = [];
 			$elements = $doc->getElementsByTagName($tag);
 			foreach ($elements as $el) {
@@ -220,6 +222,7 @@ class Theme
 		$replaceTagWithSpan('em', 'brave-hooks-em');
 
 		$newContent = $this->removeOuterDiv($doc);
+
 		return '' === $newContent ? $content : $newContent;
 	}
 
