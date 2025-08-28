@@ -154,10 +154,10 @@ class Theme
 	}
 
 	/**
-	 * Adds sr-only span to target="_blank" links.
+	 * Adds sr-only span to target="_blank" links and replaces <strong> and <em> tags with <span> for accessibility reasons.
 	 */
 	#[Filter('the_content')]
-	public function addSrOnlyTextToNewTabLinks(string $content): string
+	public function filterAccessibilityProblematicHtmlTags(string $content): string
 	{
 		if (empty($content)) {
 			return $content;
@@ -174,36 +174,52 @@ class Theme
 
 		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
 			libxml_clear_errors();
-
 			return $content; // Return original HTML if loading fails
 		}
 		libxml_clear_errors();
-		$links = $doc->getElementsByTagName('a');
 
+		// Add sr-only span to target="_blank" links
+		$links = $doc->getElementsByTagName('a');
 		foreach ($links as $link) {
 			if (! $link->hasAttribute('target') || $link->getAttribute('target') !== '_blank') {
 				continue; // Skip links without target="_blank"
 			}
-
 			$existingSpan = $link->getElementsByTagName('span');
 			foreach ($existingSpan as $span) {
 				if ($span->getAttribute('class') === 'sr-only') {
 					continue 2; // Skip if an sr-only span already exists
 				}
 			}
-
 			try {
 				$srOnlySpan = $doc->createElement('span', ' (opent in nieuw tabblad)');
 			} catch (\DOMException $e) {
 				continue;
 			}
-
 			$srOnlySpan->setAttribute('class', 'sr-only');
 			$link->appendChild($srOnlySpan);
 		}
 
-		$newContent = $this->removeOuterDiv($doc);
+		// Helper to replace tags with <span class="...">
+		$replaceTagWithSpan = function(string $tag, string $class) use ($doc) {
+			$nodes = [];
+			$elements = $doc->getElementsByTagName($tag);
+			foreach ($elements as $el) {
+				$nodes[] = $el;
+			}
+			foreach ($nodes as $el) {
+				$span = $doc->createElement('span');
+				$span->setAttribute('class', $class);
+				while ($el->firstChild) {
+					$span->appendChild($el->firstChild);
+				}
+				$el->parentNode->replaceChild($span, $el);
+			}
+		};
 
+		$replaceTagWithSpan('strong', 'brave-hooks-strong');
+		$replaceTagWithSpan('em', 'brave-hooks-em');
+
+		$newContent = $this->removeOuterDiv($doc);
 		return '' === $newContent ? $content : $newContent;
 	}
 
