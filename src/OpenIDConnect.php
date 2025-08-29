@@ -11,17 +11,27 @@ class OpenIDConnect
 	#[Filter('allow_password_reset')]
 	public function disablePasswordReset(bool $allowPasswordReset, int $userId): bool
 	{
-		if (get_user_meta($userId, 'openid-connect-generic-subject-identity', true)) {
+		if ($this->isOpenIDUser($userId)) {
 			$allowPasswordReset = false;
 		}
 
 		return $allowPasswordReset;
 	}
 
+	#[Filter('show_password_fields')]
+	public function hidePasswordFields(bool $show, \WP_User $user): bool
+	{
+		if ($this->isOpenIDUser($user->ID)) {
+			$show = false;
+		}
+
+		return $show;
+	}
+
 	#[Filter('wp_authenticate_user')]
 	public function disableLogin(\WP_User|\WP_Error $user, string $password): \WP_User|\WP_Error
 	{
-		if (is_a($user, \WP_User::class) && get_user_meta($user->ID, 'openid-connect-generic-subject-identity', true)) {
+		if (is_a($user, \WP_User::class) && $this->isOpenIDUser($user->ID)) {
 			$user = new \WP_Error('password_login_disabled', __('Inloggen met wachtwoord is niet toegestaan voor deze gebruiker'));
 		}
 
@@ -45,5 +55,10 @@ class OpenIDConnect
 		}
 
 		return $redirectTo;
+	}
+
+	protected function isOpenIDUser(int $userId): bool
+	{
+		return (bool) get_user_meta($userId, 'openid-connect-generic-subject-identity', true);
 	}
 }
