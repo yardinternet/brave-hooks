@@ -157,7 +157,7 @@ class Theme
 	 * Adds sr-only span to target="_blank" links and replaces <strong> and <em> tags with <span> for accessibility reasons.
 	 */
 	#[Filter('the_content')]
-	public function filterAccessibilityProblematicHtmlTags(string $content): string
+	public function filterA11yProblematicHtmlTags(string $content): string
 	{
 		if (empty($content)) {
 			return $content;
@@ -203,11 +203,7 @@ class Theme
 
 		// Helper to replace tags with <span class="...">
 		$replaceTagWithSpan = function (string $tag, string $class) use ($doc) {
-			$nodes = [];
-			$elements = $doc->getElementsByTagName($tag);
-			foreach ($elements as $el) {
-				$nodes[] = $el;
-			}
+			$nodes = iterator_to_array($doc->getElementsByTagName($tag), false);
 			foreach ($nodes as $el) {
 				$span = $doc->createElement('span');
 				$span->setAttribute('class', $class);
