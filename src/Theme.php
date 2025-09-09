@@ -136,7 +136,7 @@ class Theme
 
 		$doc = new DOMDocument();
 		libxml_use_internal_errors(true);
-		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED|LIBXML_HTML_NODEFDTD)) {
+		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
 			libxml_clear_errors();
 
 			return $html; // Return original HTML if loading fails
@@ -177,7 +177,7 @@ class Theme
 		// Set the encoding to UTF-8 to prevent encoding issues
 		$html = '<?xml encoding="UTF-8">' . $html;
 
-		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED|LIBXML_HTML_NODEFDTD)) {
+		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
 			libxml_clear_errors();
 
 			return $content; // Return original HTML if loading fails
