@@ -221,8 +221,8 @@ class Theme
 
 		/**
 		 * Feature flag (default: false) to replace <strong>/<em> with <span>.
-		 * Third-parties can flip this on via add_filter(..., '__return_true').
-		 * Pass $content as context for conditional logic if needed.
+		 * Third-parties can flip this on via their config for example in config/theme.php
+		 * return ['replace_inline_semantics_with_spans' => true];
 		 */
 		$shouldReplaceInlineSemantics = config('theme.replace_inline_semantics_with_spans', false);
 
