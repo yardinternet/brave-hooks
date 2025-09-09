@@ -136,7 +136,7 @@ class Theme
 
 		$doc = new DOMDocument();
 		libxml_use_internal_errors(true);
-		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
+		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED|LIBXML_HTML_NODEFDTD)) {
 			libxml_clear_errors();
 
 			return $html; // Return original HTML if loading fails
@@ -154,7 +154,12 @@ class Theme
 	}
 
 	/**
-	 * Adds sr-only span to target="_blank" links and replaces <strong> and <em> tags with <span> for accessibility reasons.
+	 * Adds sr-only span to target="_blank" links.
+	 * Optionally replaces <strong> and <em> tags with <span> wrappers for accessibility reasons,
+	 * controlled via the 'brave/hooks/replace_inline_semantics_with_spans' filter.
+	 *
+	 * Usage to enable (e.g., in a theme or mu-plugin):
+	 * add_filter('brave/hooks/replace_inline_semantics_with_spans', '__return_true');
 	 */
 	#[Filter('the_content')]
 	public function filterA11yProblematicHtmlTags(string $content): string
@@ -172,7 +177,7 @@ class Theme
 		// Set the encoding to UTF-8 to prevent encoding issues
 		$html = '<?xml encoding="UTF-8">' . $html;
 
-		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD)) {
+		if (! $doc->loadHTML($html, LIBXML_HTML_NOIMPLIED|LIBXML_HTML_NODEFDTD)) {
 			libxml_clear_errors();
 
 			return $content; // Return original HTML if loading fails
@@ -214,8 +219,17 @@ class Theme
 			}
 		};
 
-		$replaceTagWithSpan('strong', 'brave-hooks-strong');
-		$replaceTagWithSpan('em', 'brave-hooks-em');
+		/**
+		 * Feature flag (default: false) to replace <strong>/<em> with <span>.
+		 * Third-parties can flip this on via add_filter(..., '__return_true').
+		 * Pass $content as context for conditional logic if needed.
+		 */
+		$shouldReplaceInlineSemantics = config('theme.replace_inline_semantics_with_spans', false);
+
+		if ($shouldReplaceInlineSemantics) {
+			$replaceTagWithSpan('strong', 'brave-hooks-strong');
+			$replaceTagWithSpan('em', 'brave-hooks-em');
+		}
 
 		$newContent = $this->removeOuterDiv($doc);
 
