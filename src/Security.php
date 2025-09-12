@@ -104,7 +104,14 @@ class Security
 			return $welcome_email;
 		}
 
-		$resetUrl = wp_login_url("?action=rp&key=$resetKey&login=$user->user_login");
+		$resetUrl = add_query_arg(
+			[
+				'action' => 'rp',
+				'key' => $resetKey,
+				'login' => rawurlencode($user->user_login),
+			],
+			wp_login_url()
+		);
 
 		return $this->composeEmail($user->user_login, $resetUrl);
 	}
