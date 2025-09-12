@@ -21,8 +21,10 @@
 		"ext-dom": "*",
 		"ext-libxml": ">=8.1",
 		"lib-libxml": ">=2.9",
-		"yard/wp-hook-registrar": "^1.0",
-		"spatie/laravel-csp": "^2.0"
+		"roots/acorn": "^4.0|^5.0",
+		"spatie/laravel-csp": "^2.0",
+		"spatie/laravel-package-tools": "^1.16",
+		"yard/wp-hook-registrar": "dev-feat/v2"
 	},
 	"require-dev": {
 		"10up/wp_mock": "^0.4.2",
@@ -50,5 +52,12 @@
 		"format": "vendor/bin/php-cs-fixer fix",
 		"test": "vendor/bin/pest",
 		"test:coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage"
+	},
+	"extra": {
+		"acorn": {
+			"providers": [
+				"Yard\\Brave\\Hooks\\Registration\\HookServiceProvider"
+			]
+		}
 	}
 }

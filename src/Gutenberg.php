@@ -6,6 +6,7 @@ namespace Yard\Brave\Hooks;
 
 use Yard\Hook\Filter;
 
+#[Plugin('yard-gutenberg/yard-gutenberg.php')]
 class Gutenberg
 {
 	#[Filter('yard::gutenberg/allowed-blocks')]

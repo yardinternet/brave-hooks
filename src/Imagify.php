@@ -6,6 +6,7 @@ namespace Yard\Brave\Hooks;
 
 use Yard\Hook\Filter;
 
+#[Plugin('imagify/imagify.php')]
 class Imagify
 {
 	#[Filter('imagify_auto_optimize_attachment')]

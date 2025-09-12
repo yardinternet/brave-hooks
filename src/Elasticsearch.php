@@ -6,6 +6,7 @@ namespace Yard\Brave\Hooks;
 
 use Yard\Hook\Action;
 
+#[Plugin('elasticpress/elasticpress.php')]
 class Elasticsearch
 {
 	#[Action('init')]
