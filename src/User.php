@@ -36,7 +36,7 @@ class User
 	}
 
 	#[Filter('network_site_url')]
-	public function setLoginUrl(string $url, string $path, string $scheme): string
+	public function setLoginUrl(string $url, string $path, ?string $scheme): string
 	{
 		if (str_contains($path, 'wp-login.php') === false) {
 			return $url;
