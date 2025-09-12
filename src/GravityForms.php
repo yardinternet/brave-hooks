@@ -168,6 +168,12 @@ class GravityForms
 		\GFAPI::update_form($form);
 	}
 
+	#[Filter('gform_export_separator')]
+	public function exportSeparator(): string
+	{
+		return ';';
+	}
+
 	/**
 	 * Determine if form is active by form meta.
 	 * Without passing the is_active flag the form will be set to inactive by GF.
