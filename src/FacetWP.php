@@ -9,6 +9,7 @@ use SearchWP\Highlighter;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
+#[Plugin('facetwp/index.php')]
 class FacetWP
 {
 	#[Filter('facetwp_is_main_query')]

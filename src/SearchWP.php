@@ -6,6 +6,7 @@ namespace Yard\Brave\Hooks;
 
 use Yard\Hook\Filter;
 
+#[Plugin('searchwp/index.php')]
 class SearchWP
 {
 	#[Filter('searchwp\native\short_circuit')]

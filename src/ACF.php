@@ -6,6 +6,7 @@ namespace Yard\Brave\Hooks;
 
 use Yard\Hook\Filter;
 
+#[Plugin('advanced-custom-fields-pro/acf.php')]
 class ACF
 {
 	#[Filter('acf/settings/enable_post_types')]

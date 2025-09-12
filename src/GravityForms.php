@@ -7,6 +7,7 @@ namespace Yard\Brave\Hooks;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
+#[Plugin('gravityforms/gravityforms.php')]
 class GravityForms
 {
 	#[Filter('gform_disable_auto_update')]

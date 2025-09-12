@@ -7,6 +7,7 @@ namespace Yard\Brave\Hooks;
 use Yard\Brave\Hooks\Traits\ParentPage;
 use Yard\Hook\Filter;
 
+#[Plugin('wp-seopress-pro/seopress-pro.php')]
 class SEOPress
 {
 	use ParentPage;
