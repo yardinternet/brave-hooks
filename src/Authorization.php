@@ -70,17 +70,18 @@ class Authorization
 		return $show;
 	}
 
-	#[Action('wp_login')]
-	public function redirectHomeAfterLogin(string $userLogin, \WP_User $user): void
+	#[Filter('login_redirect')]
+	public function filterLoginRedirect(string $redirectTo, string $requestedRedirectTo, \WP_User|\WP_Error $user): string
 	{
-		if (user_can($user, 'administrator')) {
-			return;
+		if (is_wp_error($user) || user_can($user, 'administrator')) {
+			return $redirectTo;
 		}
 
 		if (user_can($user, 'yard_redirect_home_after_login')) {
-			wp_redirect(home_url());
-			exit;
+			return home_url();
 		}
+
+		return $redirectTo;
 	}
 
 	#[Action('admin_init')]
