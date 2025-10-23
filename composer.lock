@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "10b6debf7af308dc19bb9694f9e214f0",
+    "content-hash": "dce9f773e1ee9d529625b8f3c02b2eb4",
     "packages": [
         {
             "name": "brick/math",
@@ -5900,16 +5900,16 @@
         },
         {
             "name": "yard/wp-hook-registrar",
-            "version": "dev-feat/v2",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yardinternet/wp-hook-registrar.git",
-                "reference": "402d88c99538113d677a4be3c6305d5e4b99b13b"
+                "reference": "b1d8e24d2ec12cbca2cf9fd62d12f85633833f62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yardinternet/wp-hook-registrar/zipball/402d88c99538113d677a4be3c6305d5e4b99b13b",
-                "reference": "402d88c99538113d677a4be3c6305d5e4b99b13b",
+                "url": "https://api.github.com/repos/yardinternet/wp-hook-registrar/zipball/b1d8e24d2ec12cbca2cf9fd62d12f85633833f62",
+                "reference": "b1d8e24d2ec12cbca2cf9fd62d12f85633833f62",
                 "shasum": ""
             },
             "require": {
@@ -5934,9 +5934,9 @@
             "description": "A package for WordPress hook registration.",
             "support": {
                 "issues": "https://github.com/yardinternet/wp-hook-registrar/issues",
-                "source": "https://github.com/yardinternet/wp-hook-registrar/tree/feat/v2"
+                "source": "https://github.com/yardinternet/wp-hook-registrar/tree/v2.0.1"
             },
-            "time": "2025-09-12T09:28:16+00:00"
+            "time": "2025-10-23T14:28:15+00:00"
         }
     ],
     "packages-dev": [
@@ -10514,9 +10514,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "yard/wp-hook-registrar": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

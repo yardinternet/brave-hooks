@@ -24,7 +24,7 @@
 		"roots/acorn": "^4.0|^5.0",
 		"spatie/laravel-csp": "^2.0",
 		"spatie/laravel-package-tools": "^1.16",
-		"yard/wp-hook-registrar": "dev-feat/v2"
+		"yard/wp-hook-registrar": "^2.0"
 	},
 	"require-dev": {
 		"10up/wp_mock": "^0.4.2",
