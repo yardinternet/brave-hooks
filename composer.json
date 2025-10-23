@@ -56,7 +56,7 @@
 	"extra": {
 		"acorn": {
 			"providers": [
-				"Yard\\Brave\\Hooks\\Registration\\HookServiceProvider"
+				"Yard\\Brave\\Hooks\\HookServiceProvider"
 			]
 		}
 	}

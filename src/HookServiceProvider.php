@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yard\Brave\Hooks\Registration;
+namespace Yard\Brave\Hooks;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;

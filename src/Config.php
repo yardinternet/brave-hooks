@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Yard\Brave\Hooks\Registration;
+namespace Yard\Brave\Hooks;
 
 use ReflectionClass;
 use ReflectionException;
-use Yard\Brave\Hooks\Plugin;
 
 class Config
 {
