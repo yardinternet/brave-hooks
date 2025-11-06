@@ -98,10 +98,18 @@ class FacetWP
 		return env('GOOGLE_MAPS_API_KEY', '');
 	}
 
+	#[Filter('facetwp_proximity_autocomplete_options')]
+	public function setProximityAutocompleteOptions(array $options): array
+	{
+		$options['region'] = 'nl';
+
+		return $options;
+	}
+
 	#[Filter('gettext_fwp-front')]
 	public function translatePagerLabels(string $translation, string $text): string
 	{
-		return match($text) {
+		return match ($text) {
 			'Go to page' => 'Ga naar pagina',
 			'Go to next page' => 'Ga naar de volgende pagina',
 			'Go to previous page' => 'Ga naar de vorige pagina',
@@ -130,12 +138,12 @@ class FacetWP
 	public function changePagerLinks(string $html, array $params): string
 	{
 		// Wrap links with <li>
-		$html = str_replace([ '<a', '/a>' ], [ '<li><a', '/a></li>' ], $html);
+		$html = str_replace(['<a', '/a>'], ['<li><a', '/a></li>'], $html);
 
 		// Modify dots to be non-interactive <span>
 		if ('dots' === $params['extra_class']) {
 			$html = str_replace('facetwp-page ', 'facetwp-page-', $html); // Disable facetwp_load_a11y changes
-			$html = str_replace([ '<a', '/a>' ], [ '<span aria-hidden="true"', '/span>' ], $html);
+			$html = str_replace(['<a', '/a>'], ['<span aria-hidden="true"', '/span>'], $html);
 		}
 
 		return $html;
