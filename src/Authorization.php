@@ -109,6 +109,10 @@ class Authorization
 			return;
 		}
 
+		if (! function_exists('get_current_screen')) {
+			return;
+		}
+
 		if (get_current_screen()?->id !== 'users') {
 			return;
 		}
