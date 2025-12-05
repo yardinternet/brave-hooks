@@ -1,7 +1,7 @@
 {
 	"name": "yard/brave-hooks",
 	"type": "package",
-	"description": "Brave default hooks",
+	"description": "Brave hooks",
 	"license": "MIT",
 	"config": {
 		"allow-plugins": {

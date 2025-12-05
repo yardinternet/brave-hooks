@@ -9,29 +9,20 @@
 - [x] Load plugin-specific hooks only when the plugin is active
 
 ## Installation
-
-1. Add the following to the `repositories` section of your `composer.json`:
-
-    ```json
-    {
-      "type": "vcs",
-      "url": "git@github.com:yardinternet/brave-hooks.git"
-    }
-    ```
    
-2. Install this package with Composer:
+1. Install this package with Composer:
 
     ```sh
     composer require yard/brave-hooks
     ```
 
-3. Run the Acorn WP-CLI command to discover this package:
+2. Run the Acorn WP-CLI command to discover this package:
 
     ```shell
     wp acorn package:discover
     ```
 
-4. Publish the config file with:
+3. Publish the config file with:
 
    ```shell
    wp acorn vendor:publish --provider="Yard\Brave\Hooks\HookServiceProvider"
@@ -61,3 +52,6 @@ class ACF
     ...
 }
 ```
+## About us
+
+[![banner](https://raw.githubusercontent.com/yardinternet/.github/refs/heads/main/profile/assets/small-banner-github.svg)](https://www.yard.nl/werken-bij/)
