@@ -133,12 +133,12 @@ class User
 	protected function renderReassignUserSelect(array $users, int $userId): void
 	{
 		echo '<div class="notice notice-warning">
-				<h2>' . esc_html__('Reassign Posts', 'sage') . '</h2>
-    			<p>' . esc_html__('Select a user to reassign posts to (optional):', 'sage') . '</p>';
+				<h2>' . esc_html__('Reassign Posts', 'brave-hooks') . '</h2>
+    			<p>' . esc_html__('Select a user to reassign posts to (optional):', 'brave-hooks') . '</p>';
 		wp_dropdown_users([
 			'exclude' => [$userId],
 			'name' => 'reassign_user',
-			'show_option_none' => esc_html__('-- No reassignment --', 'sage'),
+			'show_option_none' => esc_html__('-- No reassignment --', 'brave-hooks'),
 			'option_none_value' => -1,
 			'selected' => -1,
 		]);

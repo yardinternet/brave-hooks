@@ -99,7 +99,7 @@ class Theme
 	{
 		register_post_meta('', 'featured_image_focal_point', [
 			'type' => 'object',
-			'description' => __('Focuspunt van de uitgelichte afbeelding', 'sage'),
+			'description' => __('Focus point of the featured image', 'brave-hooks'),
 			'single' => true,
 			'show_in_rest' => [
 				'schema' => [
