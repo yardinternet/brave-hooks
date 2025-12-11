@@ -124,8 +124,8 @@ class FacetWP
 	public function changePagerWrapperTag(string $html, array $params): string
 	{
 		if (isset($params['facet']['type']) && 'pager' === $params['facet']['type'] && 'numbers' === $params['facet']['pager_type']) {
-			$html = str_replace('<div class="facetwp-pager"', '<ul class="facetwp-pager list-none pl-0 mb-0"', $html);
-			$html = str_replace('</div>', '</ul>', $html);
+			$html = str_replace('<div class="facetwp-pager"', '<nav aria-label="Paginering"><ul class="facetwp-pager list-none pl-0 mb-0"', $html);
+			$html = str_replace('</div>', '</ul></nav>', $html);
 		}
 
 		return $html;
