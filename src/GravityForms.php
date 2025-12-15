@@ -16,6 +16,12 @@ class GravityForms
 		return true;
 	}
 
+	#[Filter('gform_disable_css')]
+	public function disableCSS(): bool
+	{
+		return false;
+	}
+
 	#[Filter('gform_confirmation_anchor')]
 	public function confirmationAnchor(): bool
 	{
