@@ -5,7 +5,7 @@ declare(strict_types=1);
 return [
 	'acf' => Yard\Brave\Hooks\ACF::class,
 	'authorization' => Yard\Brave\Hooks\Authorization::class,
-	'duplicate_post' => Yard\Brave\Hooks\DuplicatePost::class,
+	'duplicate-post' => Yard\Brave\Hooks\DuplicatePost::class,
 	'elasticsearch' => Yard\Brave\Hooks\Elasticsearch::class,
 	'facetwp' => Yard\Brave\Hooks\FacetWP::class,
 	'gravityforms' => Yard\Brave\Hooks\GravityForms::class,
