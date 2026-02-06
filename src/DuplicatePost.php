@@ -15,7 +15,7 @@ class DuplicatePost
 	#[Action('load-post.php')]
 	public function saveRevisionForRewriteAndRepublishCopy(): void
 	{
-		if (!class_exists(Permissions_Helper::class)) {
+		if (! class_exists(Permissions_Helper::class)) {
 			return;
 		}
 
