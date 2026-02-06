@@ -21,7 +21,7 @@ class DuplicatePost
 
 		$postID = intval($_GET['post']);
 		$post = get_post($postID);
-		if (null === $post || ! $post instanceof \WP_Post) {
+		if (! $post instanceof \WP_Post) {
 			return;
 		}
 
