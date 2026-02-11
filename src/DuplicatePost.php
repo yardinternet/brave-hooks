@@ -19,6 +19,10 @@ class DuplicatePost
 			return;
 		}
 
+		if (! isset($_GET['post'])) {
+			return;
+		}
+
 		$postID = intval($_GET['post']);
 		$post = get_post($postID);
 		if (! $post instanceof \WP_Post) {
