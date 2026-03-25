@@ -36,4 +36,51 @@ class Gutenberg
 
 		return array_merge($initialWhitelistedPrefixes, $allowedBlocksWhitelistedPrefixes);
 	}
+
+	/**
+	 * Restrict blocks based for post types through the gutenberg.php config file.
+	 */
+	#[Filter('allowed_block_types_all')]
+	public function restrictBlocksForPostTypes(bool|array $allowedBlockTypes, \WP_Block_Editor_Context $editorContext): bool|array
+	{
+		$postType = $editorContext?->post?->post_type;
+
+		if (! $postType) {
+			return $allowedBlockTypes;
+		}
+
+		$restriction = config("gutenberg.postTypeBlockRestrictions.{$postType}", []);
+
+		if (! is_array($restriction) || [] === $restriction) {
+			return $allowedBlockTypes;
+		}
+
+		$blockSet = $restriction['blockSet'] ?? null;
+
+		if (! is_string($blockSet) || '' === trim($blockSet)) {
+			return $allowedBlockTypes;
+		}
+
+		$baseBlocks = config("gutenberg.blockSets.{$restriction['blockSet']}", []);
+		$add = isset($restriction['add']) && is_array($restriction['add']) ? $restriction['add'] : [];
+		$remove = isset($restriction['remove']) && is_array($restriction['remove']) ? $restriction['remove'] : [];
+
+		$finalAllowedBlocks = array_values(array_unique(
+			array_diff([...$baseBlocks, ...$add], $remove)
+		));
+
+		if ([] === $finalAllowedBlocks) {
+			return $allowedBlockTypes;
+		}
+
+		// If previous filters have already restricted blocks via an array, intersect with our allowed set
+		// so we don't re-allow blocks they intentionally disallowed.
+		if (is_array($allowedBlockTypes)) {
+			$intersected = array_values(array_intersect($allowedBlockTypes, $finalAllowedBlocks));
+
+			return [] !== $intersected ? $intersected : $allowedBlockTypes;
+		}
+
+		return $allowedBlockTypes;
+	}
 }
