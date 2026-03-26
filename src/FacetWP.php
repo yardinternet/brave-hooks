@@ -148,4 +148,11 @@ class FacetWP
 
 		return $html;
 	}
+
+	#[Action('facetwp_scripts')]
+	public function addCollapseButtonHtml(): void
+	{
+		FWP()->display->json['expand'] = '<button class="facetwp-button-collapse-expand" aria-expanded="false"><i class="fa-regular fa-plus"></i><span class="sr-only">Klap uit</span></button>';
+		FWP()->display->json['collapse'] = '<button class="facetwp-button-collapse-collapse" aria-expanded="true"><i class="fa-regular fa-minus"></i><span class="sr-only">Klap in</span></button>';
+	}
 }
