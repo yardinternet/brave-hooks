@@ -38,7 +38,7 @@ class Gutenberg
 	}
 
 	/**
-	 * Restrict blocks based for post types through the gutenberg.php config file.
+	 * Restrict blocks for post types through the gutenberg.php config file.
 	 */
 	#[Filter('allowed_block_types_all')]
 	public function restrictBlocksForPostTypes(bool|array $allowedBlockTypes, \WP_Block_Editor_Context $editorContext): bool|array
@@ -55,13 +55,18 @@ class Gutenberg
 			return $allowedBlockTypes;
 		}
 
-		$blockSet = $restriction['blockSet'] ?? null;
+		$blockSet = isset($restriction['blockSet']) ? trim((string) $restriction['blockSet']) : null;
 
-		if (! is_string($blockSet) || '' === trim($blockSet)) {
+        if (! is_string($blockSet) || '' === $blockSet) {
+            return $allowedBlockTypes;
+        }
+
+		$baseBlocks = config("gutenberg.blockSets.{$blockSet}", []);
+
+		if (! is_array($baseBlocks)) {
 			return $allowedBlockTypes;
 		}
 
-		$baseBlocks = config("gutenberg.blockSets.{$restriction['blockSet']}", []);
 		$add = isset($restriction['add']) && is_array($restriction['add']) ? $restriction['add'] : [];
 		$remove = isset($restriction['remove']) && is_array($restriction['remove']) ? $restriction['remove'] : [];
 
