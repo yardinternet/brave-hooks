@@ -57,9 +57,9 @@ class Gutenberg
 
 		$blockSet = isset($restriction['blockSet']) ? trim((string) $restriction['blockSet']) : null;
 
-        if (! is_string($blockSet) || '' === $blockSet) {
-            return $allowedBlockTypes;
-        }
+		if (! is_string($blockSet) || '' === $blockSet) {
+			return $allowedBlockTypes;
+		}
 
 		$baseBlocks = config("gutenberg.blockSets.{$blockSet}", []);
 
