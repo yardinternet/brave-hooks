@@ -17,7 +17,7 @@ class Theme
 
 	public function __construct()
 	{
-		$this->newTabNotice = config('theme.a11y_new_tab_notice', __(' (opent in nieuw tabblad)', 'sage'));
+		$this->newTabNotice = config('theme.a11y_new_tab_notice', __('(opent in nieuw tabblad)', 'sage'));
 	}
 
 	/**
