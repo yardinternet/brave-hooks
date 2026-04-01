@@ -13,6 +13,13 @@ class Theme
 {
 	use ParentPage;
 
+	private string $newTabNotice;
+
+	public function __construct()
+	{
+		$this->newTabNotice = config('theme.a11y_new_tab_notice', __(' (opent in nieuw tabblad)', 'sage'));
+	}
+
 	/**
 	 * Disable WordPress from changing smilies (also known as smileys) into emojis.
 	 *
@@ -198,7 +205,7 @@ class Theme
 			}
 
 			try {
-				$srOnlySpan = $doc->createElement('span', ' (opent in nieuw tabblad)');
+				$srOnlySpan = $doc->createElement('span', ' ' . $this->newTabNotice);
 			} catch (\DOMException $e) {
 				continue;
 			}
@@ -234,6 +241,21 @@ class Theme
 		$newContent = $this->removeOuterDiv($doc);
 
 		return '' === $newContent ? $content : $newContent;
+	}
+
+	/**
+	 * Strips the new tab notice from excerpts and removes the extra space
+	 */
+	#[Filter('get_the_excerpt')]
+	public function stripNewTabNoticeFromExcerpt(string $excerpt, \WP_Post $post): string
+	{
+		if (has_excerpt($post)) {
+			return $excerpt;
+		}
+
+		$strippedExcerpt = str_replace($this->newTabNotice, '', $excerpt);
+
+		return preg_replace('/\s{2,}/', ' ', trim($strippedExcerpt));
 	}
 
 	/**
