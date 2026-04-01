@@ -88,4 +88,36 @@ class Gutenberg
 
 		return $allowedBlockTypes;
 	}
+
+	/**
+	 * Adds wp-block-group-column-count-<columnCount> class to wp-block-group grid for more styling options.
+	 *
+	 * @param array<string, mixed> $block
+	 */
+	#[Filter('render_block_core/group')]
+	public function addGroupColumnCountClass(string $blockContent, array $block): string
+	{
+		$columnCount = $block['attrs']['layout']['columnCount'] ?? null;
+		$columnCount = filter_var($columnCount, FILTER_VALIDATE_INT);
+
+		if (false === $columnCount || 1 > $columnCount) {
+			return $blockContent;
+		}
+
+		$className = sprintf('wp-block-group-column-count-%d', $columnCount);
+
+		if (str_contains($blockContent, $className)) {
+			return $blockContent;
+		}
+
+		$processor = new \WP_HTML_Tag_Processor($blockContent);
+
+		if (! $processor->next_tag(['tag_name' => 'div'])) {
+			return $blockContent;
+		}
+
+		$processor->add_class($className);
+
+		return $processor->get_updated_html() ?: $blockContent;
+	}
 }
