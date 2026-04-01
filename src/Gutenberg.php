@@ -112,7 +112,7 @@ class Gutenberg
 
 		$processor = new \WP_HTML_Tag_Processor($blockContent);
 
-		if (! $processor->next_tag(['tag_name' => 'div'])) {
+		if (! $processor->next_tag(['class_name' => 'wp-block-group'])) {
 			return $blockContent;
 		}
 
