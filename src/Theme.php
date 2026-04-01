@@ -255,7 +255,11 @@ class Theme
 
 		$strippedExcerpt = str_replace($this->newTabNotice, '', $excerpt);
 
-		return preg_replace('/\s{2,}/', ' ', trim($strippedExcerpt));
+		if ($strippedExcerpt === $excerpt) {
+			return $excerpt;
+		}
+
+		return preg_replace('/\s{2,}/', ' ', trim($strippedExcerpt)) ?? $strippedExcerpt;
 	}
 
 	/**
