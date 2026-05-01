@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8672b19a59eabf852b1683fdf5724a4b",
+    "content-hash": "3d42260800c27a7adc20e9b56ef5c640",
     "packages": [
         {
             "name": "brick/math",
@@ -8244,6 +8244,49 @@
                 "source": "https://github.com/phar-io/version/tree/3.2.1"
             },
             "time": "2022-02-21T01:04:05+00:00"
+        },
+        {
+            "name": "php-stubs/gravity-forms-stubs",
+            "version": "v2.9.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-stubs/gravity-forms-stubs.git",
+                "reference": "eabedbf99ff023329cffba624356389cf99cd176"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-stubs/gravity-forms-stubs/zipball/eabedbf99ff023329cffba624356389cf99cd176",
+                "reference": "eabedbf99ff023329cffba624356389cf99cd176",
+                "shasum": ""
+            },
+            "require": {
+                "php-stubs/wordpress-stubs": "^5.3 || ^6.0"
+            },
+            "require-dev": {
+                "php": "~7.1 || ~8.0",
+                "php-stubs/generator": "^0.8.0"
+            },
+            "suggest": {
+                "szepeviktor/phpstan-wordpress": "WordPress extensions for PHPStan"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Gravity Forms function and class declaration stubs for static analysis.",
+            "homepage": "https://github.com/php-stubs/gravity-forms-stubs",
+            "keywords": [
+                "PHPStan",
+                "gravity-forms",
+                "static analysis",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/php-stubs/gravity-forms-stubs/issues",
+                "source": "https://github.com/php-stubs/gravity-forms-stubs/tree/v2.9.3"
+            },
+            "time": "2025-02-21T16:58:14+00:00"
         },
         {
             "name": "php-stubs/wordpress-stubs",

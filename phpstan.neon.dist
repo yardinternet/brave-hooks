@@ -6,3 +6,5 @@ parameters:
     paths:
         - src
     tmpDir: build/phpstan
+    scanFiles:
+        - vendor/php-stubs/gravity-forms-stubs/gravity-forms-stubs.php
