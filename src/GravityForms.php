@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yard\Brave\Hooks;
 
+use GF_Field;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
@@ -271,6 +272,29 @@ class GravityForms
 				$form['fields'][$index]['enableAutocomplete'] = true;
 			}
 		}
+
+		return $form;
+	}
+
+	#[Filter('gform_export_fields')]
+	public function mergeMultiInputFieldsForExport(array $form): array
+	{
+		// only modify the form object when the form is loaded for field selection; not when actually exporting
+		if (rgpost('export_lead') || rgpost('action') == 'gf_process_export') {
+			return $form;
+		}
+
+		$fields = [];
+
+		foreach ($form['fields'] as $field) {
+			if (is_a($field, GF_Field::class) && is_array($field->inputs)) {
+				$field->inputs = null;
+			}
+
+			$fields[] = $field;
+		}
+
+		$form['fields'] = $fields;
 
 		return $form;
 	}
