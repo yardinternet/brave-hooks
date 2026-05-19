@@ -281,4 +281,15 @@ class Theme
 
 		return $newContent;
 	}
+
+	/**
+	 * Overwrite the project should_load_separate_core_block_assets since WP 6.9
+	 *
+	 * @see https://github.com/roots/sage/pull/3279
+	 */
+	#[Action('should_load_separate_core_block_assets')]
+	public function forceLoadSeparateCoreBlockAssets(): bool
+	{
+		return false;
+	}
 }
