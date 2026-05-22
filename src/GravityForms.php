@@ -287,7 +287,7 @@ class GravityForms
 		$fields = [];
 
 		foreach ($form['fields'] as $field) {
-			if (is_a($field, GF_Field::class) && is_array($field->inputs)) {
+			if ($field instanceof GF_Field && is_array($field->inputs)) {
 				$field->inputs = null;
 			}
 
