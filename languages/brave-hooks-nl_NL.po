@@ -1,0 +1,11 @@
+msgid "Focus point of the featured image"
+msgstr "Focuspunt van de uitgelichte afbeelding"
+
+msgid "Reassign Posts"
+msgstr "Berichten opnieuw toewijzen"
+
+msgid "Select a user to reassign posts to (optional):"
+msgstr "Selecteer een gebruiker om berichten aan toe te wijzen (optioneel):"
+
+msgid "-- No reassignment --"
+msgstr "-- Geen hertoekenning --"
