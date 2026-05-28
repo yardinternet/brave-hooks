@@ -34,11 +34,36 @@ class FacetWP
 		$highlighter = new Highlighter();
 		$needle = sanitize_text_field($_GET['_zoeken']);
 
-		if ($highlighter instanceof Highlighter && ! empty($needle)) {
-			$output['template'] = $highlighter->apply($output['template'], $needle);
+		if (! empty($needle) && isset($output['template']) && is_string($output['template'])) {
+			$output['template'] = $this->highlightTemplateText($output['template'], $highlighter, $needle);
 		}
 
 		return $output;
+	}
+
+	// Only highlight the text nodes, not the HTML tags
+	private function highlightTemplateText(string $template, Highlighter $highlighter, string $needle): string
+	{
+		// Example: "This is a <strong>test</strong> string." => ["This is a ", "<strong>", "test", "</strong>", " string."]
+		$parts = preg_split('/(<[^>]+>)/', $template, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+		if (! is_array($parts)) {
+			return $template;
+		}
+
+		foreach ($parts as $index => $part) {
+			if (! is_string($part)) {
+				continue;
+			}
+
+			if ('' === trim($part) || str_starts_with($part, '<')) {
+				continue;
+			}
+
+			$parts[$index] = $highlighter->apply($part, $needle);
+		}
+
+		return implode('', $parts);
 	}
 
 	#[Filter('facetwp_facets')]
