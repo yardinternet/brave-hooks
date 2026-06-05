@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yard\Brave\Hooks;
 
 use GF_Field;
+use IntlChar;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
@@ -297,5 +298,22 @@ class GravityForms
 		$form['fields'] = $fields;
 
 		return $form;
+	}
+
+	#[Filter('sanitize_file_name')]
+	public function translateNumeralsToLatin(string $fileName)
+	{
+		//IntlChar requires the php-intl extension to be installed
+		if (! class_exists('IntlChar')) {
+			return $fileName;
+		}
+
+		//regex matches to single digits
+		return preg_replace_callback('/./u', function ($m) {
+			$v = IntlChar::charDigitValue($m[0]);
+
+			// -1 means $v is not a digit
+			return -1 === $v ? $m[0] : (string) $v;
+		}, $fileName);
 	}
 }
