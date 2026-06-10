@@ -108,6 +108,7 @@ class Theme
 			'type' => 'object',
 			'description' => __('Focuspunt van de uitgelichte afbeelding', 'sage'),
 			'single' => true,
+			'revisions_enabled' => true,
 			'show_in_rest' => [
 				'schema' => [
 					'type' => 'object',
