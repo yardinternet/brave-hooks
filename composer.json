@@ -19,6 +19,7 @@
 	"require": {
 		"php": ">=8.2",
 		"ext-dom": "*",
+		"ext-intl": "*",
 		"ext-libxml": ">=8.1",
 		"lib-libxml": ">=2.9",
 		"roots/acorn": "^4.0|^5.0",
