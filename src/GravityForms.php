@@ -303,7 +303,6 @@ class GravityForms
 	#[Filter('sanitize_file_name')]
 	public function translateNumeralsToLatin(string $fileName)
 	{
-		//IntlChar requires the php-intl extension to be installed
 		if (! class_exists('IntlChar')) {
 			return $fileName;
 		}
@@ -312,7 +311,10 @@ class GravityForms
 		return preg_replace_callback('/./u', function ($m) {
 			$v = IntlChar::charDigitValue($m[0]);
 
-			// -1 means $v is not a digit
+			/*
+			* IntlChar::charDigitValue returns -1 when the character is not a digit.
+			* In that case keep the original character unchanged.
+			*/
 			return -1 === $v ? $m[0] : (string) $v;
 		}, $fileName);
 	}
