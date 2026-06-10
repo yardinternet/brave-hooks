@@ -307,7 +307,7 @@ class GravityForms
 			return $fileName;
 		}
 
-		//regex matches to single digits
+		// regex matches to single digits
 		return preg_replace_callback('/./u', function ($m) {
 			$v = IntlChar::charDigitValue($m[0]);
 
