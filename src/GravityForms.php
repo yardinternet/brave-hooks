@@ -303,10 +303,6 @@ class GravityForms
 	#[Filter('sanitize_file_name')]
 	public function translateNumeralsToLatin(string $fileName)
 	{
-		if (! class_exists('IntlChar')) {
-			return $fileName;
-		}
-
 		// regex matches to single digits
 		return preg_replace_callback('/./u', function ($m) {
 			$v = IntlChar::charDigitValue($m[0]);
