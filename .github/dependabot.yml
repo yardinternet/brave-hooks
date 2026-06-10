@@ -10,7 +10,7 @@ updates:
         patterns:
           - "*"
     commit-message:
-      prefix: "(chore)"
+      prefix: "chore"
 
   - package-ecosystem: "composer"
     directory: "/"
@@ -21,5 +21,5 @@ updates:
         patterns:
           - "*"
     commit-message:
-      prefix: "(chore)"
+      prefix: "chore"
     versioning-strategy: lockfile-only
