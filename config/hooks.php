@@ -15,5 +15,6 @@ return [
 	'searchwp' => Yard\Brave\Hooks\SearchWP::class,
 	'security' => Yard\Brave\Hooks\Security::class,
 	'seopress' => Yard\Brave\Hooks\SEOPress::class,
+	'simple-history' => Yard\Brave\Hooks\SimpleHistory::class,
 	'user' => Yard\Brave\Hooks\User::class,
 ];
