@@ -99,6 +99,20 @@ class GravityForms
 	}
 
 	/**
+	 * A11y: remove invalid `autofocus` from the validation summary.
+	 * Focus is handled in JS, so this attribute is redundant.
+	 */
+	#[Filter('gform_form_validation_errors_markup')]
+	public function removeAutofocusFromValidation(string $markup): string
+	{
+		return str_replace(
+			'data-js="gform-focus-validation-error" autofocus>',
+			'data-js="gform-focus-validation-error">',
+			$markup
+		);
+	}
+
+	/**
 	 * A11y: add role="alert" to confirmation message
 	 */
 	#[Filter('gform_confirmation')]
