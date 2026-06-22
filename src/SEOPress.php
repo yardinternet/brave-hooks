@@ -39,9 +39,9 @@ class SEOPress
 	}
 
 	#[Filter('seopress_capability')]
-	public function dashboardOptions(string $cap, string $context): string
+	public function dashboardOptions(string $cap, ?string $context = null): string
 	{
-		if ('menu' == $context || 'bot' == $context) {
+		if ('menu' === $context || 'bot' === $context) {
 			$cap = 'edit_posts';
 		}
 
