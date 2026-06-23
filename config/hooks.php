@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 return [
 	'acf' => Yard\Brave\Hooks\ACF::class,
+	'admin' => Yard\Brave\Hooks\Admin::class,
 	'authorization' => Yard\Brave\Hooks\Authorization::class,
 	'duplicate-post' => Yard\Brave\Hooks\DuplicatePost::class,
 	'elasticsearch' => Yard\Brave\Hooks\Elasticsearch::class,
