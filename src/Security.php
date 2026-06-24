@@ -14,15 +14,6 @@ class Security
 	#[Action('send_headers')]
 	public function sendHeaders(): void
 	{
-		// Force client-side TLS (Transport Layer Security) redirection.
-		header('Strict-Transport-Security: max-age=63072000; includeSubDomains; preload');
-
-		// Disable content sniffing, since it's an attack vector.
-		header('X-Content-Type-Options: nosniff');
-
-		// Prevent clickjacking
-		header('X-Frame-Options: SAMEORIGIN');
-
 		// Set a strict Referrer Policy to mitigate information leakage.
 		header('Referrer-Policy: strict-origin-when-cross-origin');
 
@@ -31,7 +22,7 @@ class Security
 	}
 
 	#[Action('send_headers')]
-	public function sendScpHeader(): void
+	public function sendCspHeader(): void
 	{
 		if (! config('csp.enabled')) {
 			return;
