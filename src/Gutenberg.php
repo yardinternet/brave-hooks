@@ -120,4 +120,70 @@ class Gutenberg
 
 		return $processor->get_updated_html() ?: $blockContent;
 	}
+
+	/**
+	 * Adds a descriptive title to embed iframes for accessibility - "YouTube video: ..."
+	 * Embeds that render no iframe (Twitter, Instagram, ...) are skipped.
+	 */
+	#[Filter('render_block_core/embed')]
+	public function addEmbedIframeTitle(string $blockContent, array $block): string
+	{
+		$providerSlug = $block['attrs']['providerNameSlug'] ?? '';
+
+		if (! is_string($providerSlug) || '' === $providerSlug) {
+			return $blockContent;
+		}
+
+		$label = $this->embedProviderLabel($providerSlug);
+
+		$type = $block['attrs']['type'] ?? '';
+		if (is_string($type) && in_array($type, ['video', 'audio'], true)) {
+			$label = sprintf('%s %s', $label, $type);
+		}
+
+		$processor = new \WP_HTML_Tag_Processor($blockContent);
+
+		$updated = false;
+		while ($processor->next_tag('iframe')) {
+			$existingTitle = $processor->get_attribute('title');
+			$existingTitle = is_string($existingTitle) ? trim($existingTitle) : '';
+
+			// Skip if label is already applied
+			if ('' !== $existingTitle && str_starts_with($existingTitle, $label)) {
+				continue;
+			}
+
+			$title = '' !== $existingTitle
+				? sprintf('%s: %s', $label, $existingTitle)
+				: $label;
+
+			$processor->set_attribute('title', $title);
+			$updated = true;
+		}
+
+		if (! $updated) {
+			return $blockContent;
+		}
+
+		return $processor->get_updated_html() ?: $blockContent;
+	}
+
+	private function embedProviderLabel(string $slug): string
+	{
+		$names = [
+			'youtube' => 'YouTube',
+			'vimeo' => 'Vimeo',
+			'dailymotion' => 'Dailymotion',
+			'ted' => 'TED',
+			'videopress' => 'VideoPress',
+			'wordpress-tv' => 'WordPress.tv',
+			'soundcloud' => 'SoundCloud',
+			'spotify' => 'Spotify',
+			'flickr' => 'Flickr',
+			'animoto' => 'Animoto',
+			'kickstarter' => 'Kickstarter',
+		];
+
+		return $names[$slug] ?? ucwords(str_replace('-', ' ', $slug));
+	}
 }
