@@ -144,7 +144,7 @@ class Gutenberg
 		$processor = new \WP_HTML_Tag_Processor($blockContent);
 
 		$updated = false;
-		while ($processor->next_tag('iframe')) {
+		while ($processor->next_tag(['tag_name' => 'iframe'])) {
 			$existingTitle = $processor->get_attribute('title');
 			$existingTitle = is_string($existingTitle) ? trim($existingTitle) : '';
 
