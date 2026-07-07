@@ -186,4 +186,20 @@ class Gutenberg
 
 		return $names[$slug] ?? ucwords(str_replace('-', ' ', $slug));
 	}
+
+	/**
+	 * WordPress 7.0 enables content-only locking for patterns by default.
+	 *
+	 * We want this behavior, but it currently also locks creation patterns for non-page post types.
+	 * Until core supports enabling/disabling this per pattern, we disable it globally.
+	 *
+	 * https://make.wordpress.org/core/2026/03/15/pattern-editing-in-wordpress-7-0/
+	 */
+	#[Filter('block_editor_settings_all')]
+	public function disableContentOnlyForUnsyncedPatterns(array $settings): array
+	{
+		$settings['disableContentOnlyForUnsyncedPatterns'] = true;
+
+		return $settings;
+	}
 }
