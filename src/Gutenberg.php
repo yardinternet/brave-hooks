@@ -202,4 +202,17 @@ class Gutenberg
 
 		return $settings;
 	}
+
+	/**
+	 * Disable the inline PDF preview on core/file blocks by default.
+	 */
+	#[Filter('block_type_metadata')]
+	public function disableFilePreviewByDefault(array $metadata): array
+	{
+		if ('core/file' === ($metadata['name'] ?? null) && isset($metadata['attributes']['displayPreview'])) {
+			$metadata['attributes']['displayPreview']['default'] = false;
+		}
+
+		return $metadata;
+	}
 }
