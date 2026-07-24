@@ -18,4 +18,5 @@ return [
 	'security' => Yard\Brave\Hooks\Security::class,
 	'seopress' => Yard\Brave\Hooks\SEOPress::class,
 	'user' => Yard\Brave\Hooks\User::class,
+	'warden' => Yard\Brave\Hooks\Warden::class,
 ];
