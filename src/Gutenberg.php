@@ -122,6 +122,48 @@ class Gutenberg
 	}
 
 	/**
+	 * Adds a11y context to the timeline item that is styled as the current step.
+	 *
+	 * @param array<string, mixed> $block
+	 */
+	#[Filter('render_block_yard/timeline-item-collapse')]
+	public function markCurrentTimelineStep(string $blockContent, array $block): string
+	{
+		$className = $block['attrs']['className'] ?? '';
+		if (! is_string($className) || ! str_contains($className, 'is-style-active-step')) {
+			return $blockContent;
+		}
+
+		$processor = new \WP_HTML_Tag_Processor($blockContent);
+		if ($processor->next_tag(['tag_name' => 'li'])) {
+			$processor->set_attribute('aria-current', 'step');
+			$blockContent = $processor->get_updated_html() ?: $blockContent;
+		}
+
+		return $this->prefixCurrentStepTitle($blockContent);
+	}
+
+	/**
+	 * Announces the current step before the timeline item title.
+	 *
+	 * The tag processor cannot insert content, so the title is matched on its class.
+	 */
+	private function prefixCurrentStepTitle(string $blockContent): string
+	{
+		$notice = sprintf('<span class="sr-only">%s </span>', __('Huidige stap:', 'sage'));
+		if (str_contains($blockContent, $notice)) {
+			return $blockContent;
+		}
+
+		return preg_replace(
+			'/(<[^>]*\bwp-block-yard-timeline-item-collapse__title\b[^>]*>)/',
+			'$1' . $notice,
+			$blockContent,
+			1
+		) ?? $blockContent;
+	}
+
+	/**
 	 * Adds a descriptive title to embed iframes for accessibility - "YouTube video: ..."
 	 * Embeds that render no iframe (Twitter, Instagram, ...) are skipped.
 	 */
