@@ -52,6 +52,15 @@ class OneloginSSO
 
 	protected function isOneloginSSOUser(int $userId): bool
 	{
+		if (! $this->isSAMLEnabled()) {
+			return false;
+		}
+
 		return (bool) get_user_meta($userId, 'onelogin_saml_sso_user', true);
+	}
+
+	protected function isSAMLEnabled(): bool
+	{
+		return function_exists('is_saml_enabled') && is_saml_enabled();
 	}
 }
