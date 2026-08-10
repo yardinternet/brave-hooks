@@ -20,4 +20,10 @@ class Admin
 	{
 		remove_action('admin_color_scheme_picker', 'admin_color_scheme_picker');
 	}
+
+	#[Filter('login_display_language_dropdown')]
+	public function disableLoginLanguageDropdown(): bool
+	{
+		return false;
+	}
 }
