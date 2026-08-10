@@ -18,7 +18,7 @@ class SimpleHistory
 	#[Filter('simple_history/db_purge_days_interval')]
 	public function setPurgeInterval(): int
 	{
-		$daysBeforePurge = 90;
+		$daysBeforePurge = 60;
 
 		return $daysBeforePurge;
 	}
