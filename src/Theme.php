@@ -289,7 +289,7 @@ class Theme
 	 * @see https://github.com/roots/sage/pull/3279
 	 */
 	#[Filter('should_load_separate_core_block_assets')]
-	public function forceLoadSeparateCoreBlockAssets(): bool
+	public function disableSeparateCoreBlockAssets(): bool
 	{
 		return false;
 	}
