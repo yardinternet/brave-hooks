@@ -13,11 +13,11 @@ class Theme
 {
 	use ParentPage;
 
-	private string $newTabNotice;
+	private ?string $newTabNotice = null;
 
-	public function __construct()
+	private function getNewTabNotice(): string
 	{
-		$this->newTabNotice = config('theme.a11y_new_tab_notice', __('(opent in nieuw tabblad)', 'sage'));
+		return $this->newTabNotice ??= config('theme.a11y_new_tab_notice', __('(opent in nieuw tabblad)', 'sage'));
 	}
 
 	/**
@@ -206,7 +206,7 @@ class Theme
 			}
 
 			try {
-				$srOnlySpan = $doc->createElement('span', ' ' . $this->newTabNotice);
+				$srOnlySpan = $doc->createElement('span', ' ' . $this->getNewTabNotice());
 			} catch (\DOMException $e) {
 				continue;
 			}
@@ -254,7 +254,7 @@ class Theme
 			return $excerpt;
 		}
 
-		$strippedExcerpt = str_replace($this->newTabNotice, '', $excerpt);
+		$strippedExcerpt = str_replace($this->getNewTabNotice(), '', $excerpt);
 
 		if ($strippedExcerpt === $excerpt) {
 			return $excerpt;
