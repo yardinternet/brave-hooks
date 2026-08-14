@@ -32,8 +32,7 @@ trait ParentPage
 		}
 
 		$postType = get_post_type($postId);
-		$supports = get_all_post_type_supports($postType);
-		$parentPageSlug = $supports['parent-page'][0]['slug'] ?? get_post_type_object($postType)->rewrite['slug'] ?? null;
+		$parentPageSlug = static::resolveParentPageSlug($postType);
 		$parent = $parentPageSlug ? get_page_by_path($parentPageSlug) : null;
 		if (! $parent) {
 			return [];
@@ -41,5 +40,12 @@ trait ParentPage
 		$ancestors = get_post_ancestors($parent->ID);
 
 		return [$parent->ID, ...$ancestors];
+	}
+
+	protected static function resolveParentPageSlug(string $postType): ?string
+	{
+		$supports = get_all_post_type_supports($postType);
+
+		return $supports['parent-page'][0]['slug'] ?? get_post_type_object($postType)->rewrite['slug'] ?? null;
 	}
 }

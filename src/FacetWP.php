@@ -6,12 +6,15 @@ namespace Yard\Brave\Hooks;
 
 use Illuminate\Http\Request;
 use SearchWP\Highlighter;
+use Yard\Brave\Hooks\Traits\ParentPage;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
 #[Plugin('facetwp/index.php')]
 class FacetWP
 {
+	use ParentPage;
+
 	#[Filter('facetwp_is_main_query')]
 	public function isMainQuery(): bool
 	{
@@ -179,5 +182,128 @@ class FacetWP
 	{
 		FWP()->display->json['expand'] = '<button class="facetwp-button-collapse-expand" aria-expanded="false"><i class="fa-regular fa-plus" aria-hidden="true"></i><span class="sr-only">Klap uit</span></button>';
 		FWP()->display->json['collapse'] = '<button class="facetwp-button-collapse-collapse" aria-expanded="true"><i class="fa-regular fa-minus" aria-hidden="true"></i><span class="sr-only">Klap in</span></button>';
+	}
+
+	private function collidingPageSlugs(): array
+	{
+		$slugs = [];
+
+		foreach (get_post_types([], 'names') as $postType) {
+			$slug = static::resolveParentPageSlug($postType);
+
+			if ($slug && get_page_by_path($slug)) {
+				$slugs[$slug] = true;
+			}
+		}
+
+		return array_keys($slugs);
+	}
+
+	#[Action('init', 999)]
+	public function registerPagingRewrite(): void
+	{
+		foreach ($this->collidingPageSlugs() as $slug) {
+			add_rewrite_rule(
+				'^'.preg_quote($slug, '/').'/page/?([0-9]{1,})/?$',
+				'index.php?pagename='.$slug.'&paged=$matches[1]',
+				'top'
+			);
+		}
+	}
+
+	private function templatePaginationNotJs(?string $templateName): bool
+	{
+		return in_array(
+			$templateName,
+			config('facetwp.no_js_pagination_templates', []),
+			true
+		);
+	}
+
+	#[Filter('facetwp_render_params')]
+	public function bridgePagedQueryVar(array $params): array
+	{
+		$templatePaginationNotJs = $this->templatePaginationNotJs($params['template'] ?? null);
+
+		if ($templatePaginationNotJs) {
+			$paged = (int) get_query_var('paged');
+
+			if (0 < $paged) {
+				$params['paged'] = $paged;
+			}
+		}
+
+		return $params;
+	}
+
+	#[Filter('facetwp_shortcode_html')]
+	public function renderNoJsPager(string $html, array $atts): string
+	{
+		$templatePaginationNotJs = $this->templatePaginationNotJs(FWP()->facet->template['name'] ?? null);
+
+		if (! $templatePaginationNotJs || 'pagination' !== ($atts['facet'] ?? null)) {
+			return $html;
+		}
+
+		$pagerArgs = FWP()->facet->pager_args ?? [];
+		$pagerFacet = FWP()->helper->get_facet_by_name('pagination') ?: [];
+
+		$pageOneUrl = strtok(esc_url(get_pagenum_link(1)), '?');
+
+		$pageLinks = paginate_links([
+			'base' => trailingslashit($pageOneUrl) . '%_%',
+			'format' => 'page/%#%/',
+			'current' => (int) ($pagerArgs['page'] ?? 1),
+			'total' => (int) ($pagerArgs['total_pages'] ?? 1),
+			'prev_text' => $pagerFacet['prev_label'] ?? '',
+			'next_text' => $pagerFacet['next_label'] ?? '',
+			'type' => 'array',
+		]);
+
+		if (empty($pageLinks)) {
+			return '';
+		}
+
+		$pageLinks = array_map(function ($link) {
+			$link = preg_replace_callback('/href="([^"]*)"/', function ($matches) {
+				return 'href="'.strtok($matches[1], '?').'"';
+			}, $link);
+
+			$link = str_replace('page-numbers', 'facetwp-page', $link);
+
+			return str_replace('facetwp-page current', 'facetwp-page active', $link);
+		}, $pageLinks);
+
+		return '<nav aria-label="Paginering"><ul class="facetwp-pager"><li>'.implode('</li><li>', $pageLinks).'</li></ul></nav>';
+	}
+
+	#[Action('facetwp_scripts')]
+	public function restoreJsPaginationFunction(): void
+	{
+		if (! $this->templatePaginationNotJs(FWP()->facet->template['name'] ?? null)) {
+			return;
+		}
+
+		wp_print_inline_script_tag('
+			document.addEventListener("click", function (event) {
+				var link = event.target.closest("a.facetwp-page");
+
+				if (!link) {
+					return;
+				}
+
+				event.preventDefault();
+
+				var url = new URL(link.href, window.location.origin);
+				var matches = url.pathname.match(/\/page\/([0-9]+)/);
+				var paged = matches ? matches[1] : null;
+
+				if (paged) {
+					FWP.paged = parseInt(paged, 10);
+					FWP.soft_refresh = true;
+					FWP.refresh();
+				}
+			});
+		');
 	}
 }
