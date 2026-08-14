@@ -38,7 +38,7 @@ class SEOPress
 		return $breadcrumbs;
 	}
 
-	#[Filter('seopress_capability')]
+	#[Filter('seopress_capability', 10000)]
 	public function dashboardOptions(string $cap, ?string $context = null): string
 	{
 		if ('menu' === $context || 'bot' === $context) {
