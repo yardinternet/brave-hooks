@@ -13,7 +13,7 @@ class PageGuard
 	/**
 	 * @param array<string> $internalInformation
 	 *
-	 * @return array<string>
+	 * @return array<array<string, string>|string>
 	 */
 	#[Filter('yard::brave-owc/internal-data/internal-information')]
 	public function addContentOwner(array $internalInformation, int $postId): array
@@ -30,29 +30,30 @@ class PageGuard
 			return $internalInformation;
 		}
 
-		$contenOwnerInfo = sprintf(
-			'%s <a href="mailto:%s">%s</a>',
-			'Inhoudseigenaar: ',
-			esc_attr($contentOwner->email()),
-			esc_html($contentOwner->name())
-		);
+		$email = $contentOwner->email();
+		$name = $contentOwner->name();
+		$phoneNumber = $contentOwner->phone();
+
+		$contentOwnerInfo = 'Inhoudseigenaar: ' . ($email ?
+			sprintf(
+				'<a href="%s">%s</a>',
+				esc_url('mailto:' . $email),
+				esc_html($name)
+			)
+				: esc_html($name));
 
 		if ('' !== $contentOwner->phone()) {
-			$phone = sprintf(
-				'<a href = "tel:%s">%s</a>',
-				$contentOwner->phone(),
-				esc_attr($contentOwner->phone())
+			$phoneInfo = sprintf(
+				'<a href="tel:%s">%s</a>',
+				esc_url($phoneNumber),
+				esc_html($phoneNumber)
 			);
-			$contenOwnerInfo .= sprintf(' (%s)', $phone);
-		}
-
-		if (! $contentOwner) {
-			return $internalInformation;
+			$contentOwnerInfo .= sprintf(' (%s)', $phoneInfo);
 		}
 
 		$internalInformation[] = [
 			'internal_information_title' => __('Inhoudscontrole', 'sage'),
-			'internal_information_content' => $contenOwnerInfo,
+			'internal_information_content' => $contentOwnerInfo,
 		];
 
 		return $internalInformation;
