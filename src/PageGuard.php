@@ -32,7 +32,7 @@ class PageGuard
 
 		$email = $contentOwner->email();
 		$name = $contentOwner->name();
-		$phoneNumber = $contentOwner->phone();
+		$phoneNumber = method_exists($contentOwner, 'phone') ? $contentOwner->phone() : '';
 
 		$contentOwnerInfo = 'Inhoudseigenaar: ' . ($email ?
 			sprintf(
@@ -42,10 +42,10 @@ class PageGuard
 			)
 				: esc_html($name));
 
-		if ('' !== $contentOwner->phone()) {
+		if ('' !== $phoneNumber) {
 			$phoneInfo = sprintf(
-				'<a href="tel:%s">%s</a>',
-				esc_url($phoneNumber),
+				'<a href="%s">%s</a>',
+				esc_url('tel:' . $phoneNumber),
 				esc_html($phoneNumber)
 			);
 			$contentOwnerInfo .= sprintf(' (%s)', $phoneInfo);
