@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yard\Brave\Hooks;
 
 use Illuminate\Support\Facades\Log;
-use Spatie\Csp\PolicyFactory;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
