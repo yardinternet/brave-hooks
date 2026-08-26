@@ -18,6 +18,10 @@ class PageGuard
 	#[Filter('yard::brave-owc/internal-data/internal-information')]
 	public function addContentOwner(array $internalInformation, int $postId): array
 	{
+		if (! class_exists(ReviewItem::class)) {
+			return $internalInformation;
+		}
+
 		$post = get_post($postId);
 
 		if (! $post instanceof \WP_Post) {
