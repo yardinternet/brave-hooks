@@ -9,12 +9,12 @@ use Rudr_Simple_WP_Crosspost;
 use WP_Post;
 
 #[Plugin('rudr-simple-wp-crosspost/rudr-simple-wp-crosspost.php')]
-class CrosspostServiceProvider
+class SimpleWPCrosspost
 {
 	#[Filter('acf/load_field/name=publication_source')]
 	public function populatePublicationSourceField(array $field): array
 	{
-		$blogName = get_blog_option(get_current_blog_id(), 'blogname');
+		$blogName = get_bloginfo('name');
 
 		$field['choices'] = [];
 		$field['choices'][$blogName] = $blogName;
@@ -23,7 +23,7 @@ class CrosspostServiceProvider
 		return $field;
 	}
 
-	#[Filter('acf/load_field/name=publication_source', 4, 10)]
+	#[Filter('rudr_swc_pre_crosspost_post_data', 10)]
 	public function resyncModifiedFeaturedImage(array $data, array $blog, WP_Post $post, string $action): array
 	{
 		$thumbnailId = get_post_thumbnail_id($post->ID);
@@ -49,9 +49,9 @@ class CrosspostServiceProvider
 
 			$newImage = Rudr_Simple_WP_Crosspost::maybe_crosspost_image($thumbnailId, $blog);
 
-			if (is_array($newImage) && ! empty($newImage['id'])) {
+			if (is_array($newImage) && $imageId = absint($newImage['id'] ?? 0)) {
 				$key = Rudr_Simple_WP_Crosspost::is_blog_wordpress_com($blog) ? 'featured_image' : 'featured_media';
-				$data[$key] = (int) $newImage['id'];
+				$data[$key] = $imageId;
 			}
 		}
 
