@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Yard\Brave\Hooks;
 
-use Yard\Hook\Filter;
 use Rudr_Simple_WP_Crosspost;
 use WP_Post;
+use Yard\Hook\Filter;
 
 #[Plugin('rudr-simple-wp-crosspost/rudr-simple-wp-crosspost.php')]
 class SimpleWPCrosspost
