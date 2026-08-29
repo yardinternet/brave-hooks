@@ -28,6 +28,8 @@ class HookServiceProvider extends PackageServiceProvider
 
 	public function packageBooted(): void
 	{
+		load_textdomain('brave-hooks', __DIR__ . '/../languages/brave-hooks-' . determine_locale() . '.mo');
+
 		app(Registrar::class)->registerHooks();
 	}
 }
