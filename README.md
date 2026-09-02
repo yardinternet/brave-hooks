@@ -1,6 +1,8 @@
 # Brave Hooks
 
 [![Code Style](https://github.com/yardinternet/brave-hooks/actions/workflows/format-php.yml/badge.svg?no-cache)](https://github.com/yardinternet/brave-hooks/actions/workflows/format-php.yml)
+![Packagist Dependency Version](https://img.shields.io/packagist/dependency-v/yard/brave-hooks/php)
+![Packagist Dependency Version](https://img.shields.io/packagist/dependency-v/yard/brave-hooks/roots%2Facorn)
 
 ## Features
 
