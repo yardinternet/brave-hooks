@@ -11,15 +11,3 @@ updates:
           - "*"
     commit-message:
       prefix: "chore"
-
-  - package-ecosystem: "composer"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    groups:
-      composer:
-        patterns:
-          - "*"
-    commit-message:
-      prefix: "chore"
-    versioning-strategy: lockfile-only
