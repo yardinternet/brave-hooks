@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Yard\Brave\Hooks;
 
-use Composer\InstalledVersions;
 use Illuminate\Support\Facades\Log;
-use Spatie\Csp\PolicyFactory;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
@@ -20,36 +18,6 @@ class Security
 
 		// Disable unused device permissions
 		header('Permissions-Policy: accelerometer=(),autoplay=(self),camera=(),display-capture=(),encrypted-media=(),fullscreen=(*),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),midi=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),screen-wake-lock=(),sync-xhr=(self),usb=(),xr-spatial-tracking=()');
-	}
-
-	#[Action('send_headers')]
-	public function sendCspHeader(): void
-	{
-		if (! config('csp.enabled')) {
-			return;
-		}
-
-		// nutshell (>= 2.0.0) registers Spatie\Csp\AddCspHeaders as request
-		// middleware and owns the CSP header. Sending it again here would
-		// duplicate/conflict with it.
-		if ($this->nutshellHandlesCspViaMiddleware()) {
-			return;
-		}
-
-		$policy = PolicyFactory::create(config('csp.policy'));
-
-		header(sprintf('%s: %s', $policy->prepareHeader(), $policy->__toString()), true);
-	}
-
-	private function nutshellHandlesCspViaMiddleware(): bool
-	{
-		if (! class_exists(InstalledVersions::class) || ! InstalledVersions::isInstalled('yard/nutshell')) {
-			return false;
-		}
-
-		$version = InstalledVersions::getVersion('yard/nutshell');
-
-		return null !== $version && version_compare($version, '3.0.0', '>=');
 	}
 
 	#[Filter('wp_script_attributes')]
