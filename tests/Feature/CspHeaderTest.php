@@ -10,7 +10,7 @@ it('defers CSP to nutshell middleware when yard/nutshell >= 2.0.0 is installed',
 	$reflection->setAccessible(true);
 
 	$expected = InstalledVersions::isInstalled('yard/nutshell')
-		&& version_compare((string) InstalledVersions::getVersion('yard/nutshell'), '2.0.0', '>=');
+		&& version_compare((string) InstalledVersions::getVersion('yard/nutshell'), '3.0.0', '>=');
 
 	expect($reflection->invoke(new Security()))->toBe($expected);
 });

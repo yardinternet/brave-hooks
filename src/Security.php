@@ -49,7 +49,7 @@ class Security
 
 		$version = InstalledVersions::getVersion('yard/nutshell');
 
-		return null !== $version && version_compare($version, '2.0.0', '>=');
+		return null !== $version && version_compare($version, '3.0.0', '>=');
 	}
 
 	#[Filter('wp_script_attributes')]
