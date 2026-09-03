@@ -39,39 +39,49 @@ class Authorization
 	}
 
 	#[Filter('map_meta_cap', 1)]
+	/**
+	 * @param array<int, mixed> $args
+	 */
 	public function addCapabilityForEditingAttachments(array $caps, string $cap, int $userId, array $args): array
 	{
-		if ('edit_post' === $cap && isset($args[0])) {
-			$post = get_post($args[0]);
-
-			if (is_a($post, 'WP_Post') && 'attachment' === $post->post_type) {
-				if ((int) $post->post_author === $userId) {
-					return ['yard_edit_attachments'];
-				} else {
-					return $caps;
-				}
-			}
+		if ('edit_post' !== $cap || ! isset($args[0])) {
+			return $caps;
 		}
 
-		return $caps;
+		$post = get_post($args[0]);
+
+		if (! is_a($post, 'WP_Post') || 'attachment' !== $post->post_type) {
+			return $caps;
+		}
+
+		if ((int) $post->post_author !== $userId) {
+			return $caps;
+		}
+
+		return ['yard_edit_attachments'];
 	}
 
 	#[Filter('map_meta_cap', 1)]
+	/**
+	 * @param array<int, mixed> $args
+	 */
 	public function addCapabilityForDeletingAttachments(array $caps, string $cap, int $userId, array $args): array
 	{
-		if ('delete_post' === $cap && isset($args[0])) {
-			$post = get_post($args[0]);
-
-			if (is_a($post, 'WP_Post') && 'attachment' === $post->post_type) {
-				if ((int) $post->post_author === $userId) {
-					return ['yard_delete_attachments'];
-				} else {
-					return $caps;
-				}
-			}
+		if ('delete_post' !== $cap || ! isset($args[0])) {
+			return $caps;
 		}
 
-		return $caps;
+		$post = get_post($args[0]);
+
+		if (! is_a($post, 'WP_Post') || 'attachment' !== $post->post_type) {
+			return $caps;
+		}
+
+		if ((int) $post->post_author !== $userId) {
+			return $caps;
+		}
+
+		return ['yard_delete_attachments'];
 	}
 
 	#[Filter('show_admin_bar')]
