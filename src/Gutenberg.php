@@ -215,4 +215,15 @@ class Gutenberg
 
 		return $metadata;
 	}
+
+	/**
+	 * A11y: remove empty headings since they pollute the document and fail WCAG 1.3.1.
+	 */
+	#[Filter('render_block_core/heading')]
+	public function removeEmptyHeadings(string $content): string
+	{
+		$text = html_entity_decode(wp_strip_all_tags($content), ENT_QUOTES, 'UTF-8');
+
+		return '' === trim($text, " \t\n\r\0\x0B\u{00A0}") ? '' : $content;
+	}
 }
