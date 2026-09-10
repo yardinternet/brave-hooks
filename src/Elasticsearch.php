@@ -19,6 +19,8 @@ class Elasticsearch
 	public function activateSearchFeature(): void
 	{
 		if (! class_exists('\ElasticPress\Features')) {
+			return;
+		}
 
 		$features = \ElasticPress\Features::factory();
 
