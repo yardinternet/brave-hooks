@@ -15,6 +15,22 @@ class Elasticsearch
 		add_rewrite_rule('^zoeken/?$', 'index.php?s=$matches[1]', 'top');
 	}
 
+	#[Action('ep_setup_features')]
+	public function activateSearchFeature(): void
+	{
+		if (! class_exists('\ElasticPress\Features')) {
+
+		$features = \ElasticPress\Features::factory();
+
+		$search = $features->get_registered_feature('search');
+
+		if (! $search || $search->is_active()) {
+			return;
+		}
+
+		$features->activate_feature('search');
+	}
+
 	#[Action('template_redirect')]
 	public function redirectDefaultSearch(): void
 	{
