@@ -112,7 +112,6 @@ class GravityForms
 		);
 	}
 
-
 	/**
 	 * A11y: change ordered list to unordered list in validation message
 	 */
