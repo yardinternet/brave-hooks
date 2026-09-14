@@ -112,6 +112,20 @@ class GravityForms
 		);
 	}
 
+
+	/**
+	 * A11y: change ordered list to unordered list in validation message
+	 */
+	#[Filter('gform_form_validation_errors_markup')]
+	public function changeOrderedListToUnorderedList(string $markup): string
+	{
+		return str_replace(
+			['<ol', '</ol>'],
+			['<ul', '</ul>'],
+			$markup
+		);
+	}
+
 	/**
 	 * A11y: add role="alert" to confirmation message
 	 */
