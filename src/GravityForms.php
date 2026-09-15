@@ -342,7 +342,6 @@ class GravityForms
 		// fe: Arabic letter ayn is changed into ` which is a valid ascii character but not a valid filename character
 		$baseName = trim((string) preg_replace('/[^A-Za-z0-9_-]+/', '-', $baseName), '-');
 
-		// rtrim keeps a file that had no extension from ending up as "naam."
 		return $baseName . '.' . $extension;
 	}
 }
