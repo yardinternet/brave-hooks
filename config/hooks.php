@@ -8,6 +8,7 @@ return [
 	'authorization' => Yard\Brave\Hooks\Authorization::class,
 	'duplicate-post' => Yard\Brave\Hooks\DuplicatePost::class,
 	'elasticsearch' => Yard\Brave\Hooks\Elasticsearch::class,
+	'exception-page' => Yard\Brave\Hooks\ExceptionPage::class,
 	'crosspost' => Yard\Brave\Hooks\SimpleWPCrosspost::class,
 	'facetwp' => Yard\Brave\Hooks\FacetWP::class,
 	'gravityforms' => Yard\Brave\Hooks\GravityForms::class,
