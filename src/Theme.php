@@ -13,12 +13,6 @@ class Theme
 {
 	use ParentPage;
 
-	private string $newTabNotice;
-
-	public function __construct()
-	{
-		$this->newTabNotice = config('theme.a11y_new_tab_notice', __('(opent in nieuw tabblad)', 'sage'));
-	}
 
 	/**
 	 * Disable WordPress from changing smilies (also known as smileys) into emojis.
@@ -206,7 +200,7 @@ class Theme
 			}
 
 			try {
-				$srOnlySpan = $doc->createElement('span', ' ' . $this->newTabNotice);
+				$srOnlySpan = $doc->createElement('span', ' ' . $this->newTabNotice());
 			} catch (\DOMException $e) {
 				continue;
 			}
@@ -254,13 +248,18 @@ class Theme
 			return $excerpt;
 		}
 
-		$strippedExcerpt = str_replace($this->newTabNotice, '', $excerpt);
+		$strippedExcerpt = str_replace($this->newTabNotice(), '', $excerpt);
 
 		if ($strippedExcerpt === $excerpt) {
 			return $excerpt;
 		}
 
 		return preg_replace('/\s{2,}/', ' ', trim($strippedExcerpt)) ?? $strippedExcerpt;
+	}
+
+	private function newTabNotice(): string
+	{
+		return config('theme.a11y_new_tab_notice', __('(opent in nieuw tabblad)', 'sage'));
 	}
 
 	/**
