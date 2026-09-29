@@ -22,4 +22,10 @@ class SimpleHistory
 
 		return $daysBeforePurge;
 	}
+
+	#[Filter('simple_history/stealth_mode_allowed_emails')]
+	public function setAllowedEmails(): array
+	{
+		return ['@yard.nl'];
+	}
 }
