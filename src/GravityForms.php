@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Yard\Brave\Hooks;
 
 use GF_Field;
-use IntlChar;
+use Transliterator;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
@@ -327,18 +327,34 @@ class GravityForms
 		return $form;
 	}
 
+	/**
+	 * Uploads keep their original file name, so a non-ASCII filename (fe Arabic,
+	 * Chinese) is changed to ASCII.
+	 * ICU also converts non-Latin digits (Arabic-Indic ٢٠٢٤ -> 2024), so this
+	 * covers the numeral case as well. Ensures upload url remains readable and attached file is added to the notification email.
+	 */
 	#[Filter('sanitize_file_name')]
-	public function translateNumeralsToLatin(string $fileName)
+	public function transliterateFileNameToAscii(string $fileName): string
 	{
-		// regex matches to single digits
-		return preg_replace_callback('/./u', function ($m) {
-			$v = IntlChar::charDigitValue($m[0]);
+		$baseName = pathinfo($fileName, PATHINFO_FILENAME);
+		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
 
-			/*
-			* IntlChar::charDigitValue returns -1 when the character is not a digit.
-			* In that case keep the original character unchanged.
-			*/
-			return -1 === $v ? $m[0] : (string) $v;
-		}, $fileName);
+		// First go from any character set to latin, and then from accented to unaccented latin.
+		// https://unicode-org.github.io/icu/userguide/transforms/general/#icu-transliterators
+		$transliterator = Transliterator::create('Any-Latin; Latin-ASCII');
+
+		if ($transliterator instanceof Transliterator) {
+			$transliterated = $transliterator->transliterate($baseName);
+
+			if (is_string($transliterated)) {
+				$baseName = $transliterated;
+			}
+		}
+
+		// fallback regex to change any characters that still do not match a valid filename
+		// fe: Arabic letter ayn is changed into ` which is a valid ascii character but not a valid filename character
+		$baseName = trim((string) preg_replace('/[^A-Za-z0-9_-]+/', '-', $baseName), '-');
+
+		return $baseName . '.' . $extension;
 	}
 }
