@@ -13,7 +13,6 @@ class Theme
 {
 	use ParentPage;
 
-
 	/**
 	 * Disable WordPress from changing smilies (also known as smileys) into emojis.
 	 *

@@ -29,6 +29,25 @@ class Gutenberg
 			->all();
 	}
 
+	/**
+	 * Raw HTML bypasses both the CSP whitelist and the block restrictions, so the Custom HTML
+	 * block follows the unfiltered_html cap: on multisite that is the super admin only.
+	 * Priority 20 so a site's allowedCoreBlocks config can't add core/html back.
+	 *
+	 * @param array<int, string> $allowedBlocks
+	 *
+	 * @return array<int, string>
+	 */
+	#[Filter('yard::gutenberg/allowed-core-blocks', 20)]
+	public function restrictHtmlBlock(array $allowedBlocks): array
+	{
+		if (current_user_can('unfiltered_html')) {
+			return $allowedBlocks;
+		}
+
+		return array_values(array_diff($allowedBlocks, ['core/html']));
+	}
+
 	#[Filter('yard::gutenberg/allowed-blocks-whitelisted-prefixes')]
 	public function registerBlocksWhitelistedPrefixes(array $initialWhitelistedPrefixes): array
 	{
