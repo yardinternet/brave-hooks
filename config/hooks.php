@@ -6,6 +6,7 @@ return [
 	'acf' => Yard\Brave\Hooks\ACF::class,
 	'admin' => Yard\Brave\Hooks\Admin::class,
 	'authorization' => Yard\Brave\Hooks\Authorization::class,
+	'block-components' => Yard\Brave\Hooks\BlockComponents::class,
 	'duplicate-post' => Yard\Brave\Hooks\DuplicatePost::class,
 	'elasticsearch' => Yard\Brave\Hooks\Elasticsearch::class,
 	'crosspost' => Yard\Brave\Hooks\SimpleWPCrosspost::class,
