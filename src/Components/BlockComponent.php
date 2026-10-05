@@ -38,7 +38,8 @@ class BlockComponent extends Component
 			$blockName = self::$aliases[$this->componentName] ?? null;
 			$slot = (string) $data['slot'];
 
-			// When a plugin is deactivated, fall back to the slot content (like WP does)
+			// Block unregistered after this view was compiled (e.g. plugin deactivated): fall back to the slot content like WP does.
+			// Uncompiled views fail on the unknown component instead.
 			if (null === $blockName) {
 				return $slot;
 			}
