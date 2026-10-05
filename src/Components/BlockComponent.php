@@ -38,18 +38,15 @@ class BlockComponent extends Component
 			$blockName = self::$aliases[$this->componentName] ?? null;
 			$slot = (string) $data['slot'];
 
-			// Block unregistered after this view was compiled (e.g. plugin deactivated): fall back to the slot content like WP does.
-			// Uncompiled views fail on the unknown component instead.
 			if (null === $blockName) {
 				return $slot;
 			}
 
 			return render_block([
 				'blockName' => $blockName,
-				// Drop empty values so the block's own defaults apply
 				'attrs' => array_filter(
 					[...$this->defaultVariationAttributes($blockName), ...$this->attributesToBlockAttributes()],
-					fn ($value) => '' !== $value,
+					fn ($value) => '' !== $value, // Drop empty values
 				),
 				'innerBlocks' => [],
 				'innerHTML' => $slot,
@@ -69,9 +66,7 @@ class BlockComponent extends Component
 	}
 
 	/**
-	 * The editor applies the default variation on insert, render_block() doesn't.
-	 *
-	 * Without this the rendered block is different from the same block placed in the editor.
+	 * Apply the default variation attributes
 	 *
 	 * @return array<string, mixed>
 	 */
