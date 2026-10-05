@@ -14,9 +14,6 @@ class BlockComponents
 	/**
 	 * Make every dynamic block useable as <x-block-{namespace}-{name}>:
 	 * <x-block-theme-card>, <x-block-core-search>, <x-block-yard-icon>
-	 *
-	 * Static save.js blocks are skipped because render_block() can't rebuild their saved markup from attributes.
-	 * Blocks relying on block context won't work: slots render before their parent block
 	 */
 	#[Action('init', PHP_INT_MAX)]
 	public function registerBlockComponents(): void
