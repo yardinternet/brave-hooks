@@ -29,6 +29,12 @@ class Security
 		return $attributes;
 	}
 
+	#[Filter('acorn/powered_by')]
+	public function removeAcornPoweredBy(): bool
+	{
+		return false;
+	}
+
 	#[Filter('wpmu_signup_user_notification')]
 	public function handleUserSignup(string $user_login, string $user_email, string $key, array $meta): bool
 	{
