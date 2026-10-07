@@ -233,7 +233,7 @@ class Gutenberg
 	}
 
 	/**
-	 * Remove fitText block supports for core/heading blocks
+	 * Remove fitText block supports from all blocks (core/heading and core/paragraph in WP 7.1)
 	 */
 	#[Filter('block_type_metadata')]
 	public function disableFitText(array $metadata): array
@@ -244,7 +244,9 @@ class Gutenberg
 	}
 
 	/**
-	 * Hides the block bindings "Attributen" panel in the editor
+	 * Hides the block bindings "Attributen" panel in the editor.
+	 *
+	 * Also disables pattern overrides and editor-side resolving of bindings, which we don't use.
 	 */
 	#[Filter('block_editor_settings_all')]
 	public function disableBlockBindingsPanel(array $settings): array
