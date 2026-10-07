@@ -217,6 +217,44 @@ class Gutenberg
 	}
 
 	/**
+	 * Filter theme.json to remove "textIndent" control
+	 */
+	#[Filter('wp_theme_json_data_theme')]
+	public function disableTextIndent(\WP_Theme_JSON_Data $themeJson): \WP_Theme_JSON_Data
+	{
+		return $themeJson->update_with([
+			'version' => 3,
+			'settings' => [
+				'typography' => [
+					'textIndent' => false,
+				],
+			],
+		]);
+	}
+
+	/**
+	 * Remove fitText block supports for core/heading blocks
+	 */
+	#[Filter('block_type_metadata')]
+	public function disableFitText(array $metadata): array
+	{
+		unset($metadata['supports']['typography']['fitText']);
+
+		return $metadata;
+	}
+
+	/**
+	 * Hides the block bindings "Attributen" panel in the editor
+	 */
+	#[Filter('block_editor_settings_all')]
+	public function disableBlockBindingsPanel(array $settings): array
+	{
+		$settings['__experimentalBlockBindingsSupportedAttributes'] = [];
+
+		return $settings;
+	}
+
+	/**
 	 * A11y: remove empty headings since they pollute the document and fail WCAG 1.3.1.
 	 */
 	#[Filter('render_block_core/heading')]
