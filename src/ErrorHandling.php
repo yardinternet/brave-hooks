@@ -29,7 +29,7 @@ class ErrorHandling
 	}
 
 	/**
-	 * Acorn throws notices and warnings and swallows deprecations; returning false hands them back to PHP.
+	 * Acorn throws notices and warnings and swallows deprecations; send them to PHP, or all to Ignition with ERROR_ALWAYS_IGNITION.
 	 */
 	private function passDiagnosticsToPhp(): void
 	{
@@ -43,12 +43,18 @@ class ErrorHandling
 			return;
 		}
 
-		set_error_handler(static function (int $level, string $message, string $file = '', int $line = 0) use ($previous): mixed {
-			if (0 !== ($level & self::NON_FATAL_LEVELS)) {
-				return false;
+		$alwaysIgnition = (bool) env('ERROR_ALWAYS_IGNITION', false);
+
+		set_error_handler(static function (int $level, string $message, string $file = '', int $line = 0) use ($previous, $alwaysIgnition): mixed {
+			if (0 === ($level & self::NON_FATAL_LEVELS)) {
+				return $previous($level, $message, $file, $line);
 			}
 
-			return $previous($level, $message, $file, $line);
+			if ($alwaysIgnition && 0 !== (error_reporting() & $level)) {
+				throw new ErrorException($message, 0, $level, $file, $line);
+			}
+
+			return false;
 		});
 	}
 
