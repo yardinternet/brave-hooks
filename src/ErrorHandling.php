@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yard\Brave\Hooks;
 
+use ErrorException;
 use Throwable;
 use Yard\Hook\Action;
 
@@ -32,6 +33,32 @@ class ErrorHandling
 		}
 
 		set_error_handler(static fn (int $level, string $message, string $file = '', int $line = 0): mixed => ($level & self::NON_FATAL_LEVELS) ? false : $previous($level, $message, $file, $line));
+	}
+
+	/**
+	 * Fatals such as memory exhaustion skip every handler. Acorn catches them on shutdown, but only
+	 * while app.debug is on, so with WP_DEBUG_DISPLAY off they end as an empty 500 instead.
+	 */
+	#[Action('after_setup_theme', PHP_INT_MAX)]
+	public function showFatalsWithoutAcorn(): void
+	{
+		if ('development' !== wp_get_environment_type() || config('app.debug')) {
+			return;
+		}
+
+		register_shutdown_function(static function (): void {
+			$error = error_get_last();
+
+			if (null === $error || 0 === ($error['type'] & (E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR | E_PARSE))) {
+				return;
+			}
+
+			$handler = set_exception_handler(null);
+
+			if (is_callable($handler)) {
+				$handler(new ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line']));
+			}
+		});
 	}
 
 	/**
