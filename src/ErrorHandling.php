@@ -4,28 +4,34 @@ declare(strict_types=1);
 
 namespace Yard\Brave\Hooks;
 
-use ErrorException;
 use Throwable;
 use Yard\Hook\Action;
-use Yard\Hook\Filter;
 
 class ErrorHandling
 {
 	public const NON_FATAL_LEVELS = E_DEPRECATED | E_USER_DEPRECATED | E_NOTICE | E_USER_NOTICE | E_WARNING | E_USER_WARNING;
 
 	/**
-	 * Acorn turns every notice and warning into an exception, which takes the page down.
+	 * Acorn turns notices and warnings into exceptions and sends deprecations to a log channel
+	 * that is null by default. Returning false hands these levels back to PHP, so WordPress
+	 * displays and logs them like it does before Acorn boots.
 	 *
 	 * @see \Roots\Acorn\Bootstrap\HandleExceptions::handleError()
 	 */
-	#[Filter('acorn/throw_error_exception')]
-	public function keepDiagnosticsNonFatal(bool $throw, Throwable $error): bool
+	#[Action('after_setup_theme', PHP_INT_MAX)]
+	public function keepDiagnosticsNonFatal(): void
 	{
-		if ('development' !== wp_get_environment_type() || ! $error instanceof ErrorException) {
-			return $throw;
+		if ('development' !== wp_get_environment_type()) {
+			return;
 		}
 
-		return (bool) ($error->getSeverity() & self::NON_FATAL_LEVELS) ? false : $throw;
+		$previous = set_error_handler(null);
+
+		if (! is_callable($previous)) {
+			return;
+		}
+
+		set_error_handler(static fn (int $level, string $message, string $file = '', int $line = 0): mixed => ($level & self::NON_FATAL_LEVELS) ? false : $previous($level, $message, $file, $line));
 	}
 
 	/**
