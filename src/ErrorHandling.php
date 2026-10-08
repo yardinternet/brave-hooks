@@ -9,26 +9,23 @@ use Throwable;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
-class Dev
+class ErrorHandling
 {
+	public const NON_FATAL_LEVELS = E_DEPRECATED | E_USER_DEPRECATED | E_NOTICE | E_USER_NOTICE | E_WARNING | E_USER_WARNING;
+
 	/**
 	 * Acorn turns every notice and warning into an exception, which takes the page down.
-	 * Opt in by defining DEV_NON_FATAL_ERROR_LEVELS in config/environments/development.php.
 	 *
 	 * @see \Roots\Acorn\Bootstrap\HandleExceptions::handleError()
 	 */
 	#[Filter('acorn/throw_error_exception')]
 	public function keepDiagnosticsNonFatal(bool $throw, Throwable $error): bool
 	{
-		if ('development' !== wp_get_environment_type() || ! defined('DEV_NON_FATAL_ERROR_LEVELS')) {
+		if ('development' !== wp_get_environment_type() || ! $error instanceof ErrorException) {
 			return $throw;
 		}
 
-		if (! $error instanceof ErrorException) {
-			return $throw;
-		}
-
-		return (bool) ($error->getSeverity() & DEV_NON_FATAL_ERROR_LEVELS) ? false : $throw;
+		return (bool) ($error->getSeverity() & self::NON_FATAL_LEVELS) ? false : $throw;
 	}
 
 	/**
