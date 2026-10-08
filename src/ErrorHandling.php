@@ -33,6 +33,10 @@ class ErrorHandling
 	 */
 	private function passDiagnosticsToPhp(): void
 	{
+		if (! config('app.debug')) {
+			return;
+		}
+
 		$previous = set_error_handler(null);
 
 		if (! is_callable($previous)) {
