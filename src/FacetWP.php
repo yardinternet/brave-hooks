@@ -180,4 +180,14 @@ class FacetWP
 		FWP()->display->json['expand'] = '<button class="facetwp-button-collapse-expand" aria-expanded="false"><i class="fa-regular fa-plus" aria-hidden="true"></i><span class="sr-only">Klap uit</span></button>';
 		FWP()->display->json['collapse'] = '<button class="facetwp-button-collapse-collapse" aria-expanded="true"><i class="fa-regular fa-minus" aria-hidden="true"></i><span class="sr-only">Klap in</span></button>';
 	}
+
+	#[Filter('facetwp_asset_html')]
+	public function filterAssetHtml(string $html, string $url): string
+	{
+		if (! str_ends_with($url, '.js')) {
+			return $html;
+		}
+
+		return wp_get_script_tag(['src' => $url]);
+	}
 }
