@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [NEXT] -
+
+-   Fix: treat feeds as XML in Weglot so tag names keep their case
+
 ## [v3.3.0] - 2026-10-08
 
 -   Feat: add ERROR_ALWAYS_IGNITION to send diagnostics to Ignition

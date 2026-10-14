@@ -23,5 +23,6 @@ return [
 	'simple-history' => Yard\Brave\Hooks\SimpleHistory::class,
 	'user' => Yard\Brave\Hooks\User::class,
 	'warden' => Yard\Brave\Hooks\Warden::class,
+	'weglot' => Yard\Brave\Hooks\Weglot::class,
 	'page-guard' => Yard\Brave\Hooks\PageGuard::class,
 ];
