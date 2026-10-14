@@ -9,18 +9,26 @@ use Yard\Hook\Filter;
 #[Plugin('yard-gutenberg/yard-gutenberg.php')]
 class Gutenberg
 {
+	/**
+	 * @return array<mixed>
+	 */
 	#[Filter('yard::gutenberg/allowed-blocks')]
 	public function registerYardGutenbergBlocks(): array
 	{
-		return config('gutenberg.allowedBlocks', []);
+		return config_array('gutenberg.allowedBlocks');
 	}
 
+	/**
+	 * @param array<int, string> $initialAllowedBlocks
+	 *
+	 * @return array<int, mixed>
+	 */
 	#[Filter('yard::gutenberg/allowed-core-blocks')]
 	public function registerCoreBlocks(array $initialAllowedBlocks): array
 	{
-		$additionalBlocks = collect(config('gutenberg.allowedCoreBlocks', []));
+		$additionalBlocks = collect(config_array('gutenberg.allowedCoreBlocks'));
 
-		$excludeBlocks = collect(config('gutenberg.excludedCoreBlocks', []));
+		$excludeBlocks = collect(config_array('gutenberg.excludedCoreBlocks'));
 
 		return collect($initialAllowedBlocks)
 			->merge($additionalBlocks)
@@ -29,21 +37,30 @@ class Gutenberg
 			->all();
 	}
 
+	/**
+	 * @param array<int, string> $initialWhitelistedPrefixes
+	 *
+	 * @return array<mixed>
+	 */
 	#[Filter('yard::gutenberg/allowed-blocks-whitelisted-prefixes')]
 	public function registerBlocksWhitelistedPrefixes(array $initialWhitelistedPrefixes): array
 	{
-		$allowedBlocksWhitelistedPrefixes = config('gutenberg.allowedBlocksWhitelistedPrefixes', []);
+		$allowedBlocksWhitelistedPrefixes = config_array('gutenberg.allowedBlocksWhitelistedPrefixes');
 
 		return array_merge($initialWhitelistedPrefixes, $allowedBlocksWhitelistedPrefixes);
 	}
 
 	/**
 	 * Restrict blocks for post types through the gutenberg.php config file.
+	 *
+	 * @param bool|array<int, string> $allowedBlockTypes
+	 *
+	 * @return bool|array<int, string>
 	 */
 	#[Filter('allowed_block_types_all')]
 	public function restrictBlocksForPostTypes(bool|array $allowedBlockTypes, \WP_Block_Editor_Context $editorContext): bool|array
 	{
-		$postType = $editorContext?->post?->post_type;
+		$postType = $editorContext->post?->post_type;
 
 		if (! $postType) {
 			return $allowedBlockTypes;
@@ -124,6 +141,8 @@ class Gutenberg
 	/**
 	 * Adds a descriptive title to embed iframes for accessibility - "YouTube video: ..."
 	 * Embeds that render no iframe (Twitter, Instagram, ...) are skipped.
+	 *
+	 * @param array<string, mixed> $block
 	 */
 	#[Filter('render_block_core/embed')]
 	public function addEmbedIframeTitle(string $blockContent, array $block): string
@@ -194,6 +213,10 @@ class Gutenberg
 	 * Until core supports enabling/disabling this per pattern, we disable it globally.
 	 *
 	 * https://make.wordpress.org/core/2026/03/15/pattern-editing-in-wordpress-7-0/
+	 *
+	 * @param array<string, mixed> $settings
+	 *
+	 * @return array<string, mixed>
 	 */
 	#[Filter('block_editor_settings_all')]
 	public function disableContentOnlyForUnsyncedPatterns(array $settings): array
@@ -205,6 +228,10 @@ class Gutenberg
 
 	/**
 	 * Disable the inline PDF preview on core/file blocks by default.
+	 *
+	 * @param array<string, mixed> $metadata
+	 *
+	 * @return array<string, mixed>
 	 */
 	#[Filter('block_type_metadata')]
 	public function disableFilePreviewByDefault(array $metadata): array
@@ -234,6 +261,10 @@ class Gutenberg
 
 	/**
 	 * Remove fitText block supports from all blocks (core/heading and core/paragraph in WP 7.1)
+	 *
+	 * @param array<string, mixed> $metadata
+	 *
+	 * @return array<string, mixed>
 	 */
 	#[Filter('block_type_metadata')]
 	public function disableFitText(array $metadata): array
@@ -247,6 +278,10 @@ class Gutenberg
 	 * Hides the block bindings "Attributen" panel in the editor.
 	 *
 	 * Also disables pattern overrides and editor-side resolving of bindings, which we don't use.
+	 *
+	 * @param array<string, mixed> $settings
+	 *
+	 * @return array<string, mixed>
 	 */
 	#[Filter('block_editor_settings_all')]
 	public function disableBlockBindingsPanel(array $settings): array

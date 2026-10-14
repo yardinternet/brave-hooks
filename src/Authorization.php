@@ -9,6 +9,17 @@ use Yard\Hook\Filter;
 
 class Authorization
 {
+	/**
+	 * Matches a localized count such as "(1,234)", "(1&nbsp;234)" or "(1’234)".
+	 * Any thousands separator is accepted, as long as the count starts and ends with a digit.
+	 */
+	private const VIEW_COUNT_PATTERN = '/\((\d(?:[^()<>]*\d)?)\)/u';
+
+	/**
+	 * @param array<int, string> $caps
+	 *
+	 * @return array<int, string>
+	 */
 	#[Filter('map_meta_cap', 1)]
 	public function allowUnfilteredHtml(array $caps, string $cap, int $userId): array
 	{
@@ -23,6 +34,11 @@ class Authorization
 		return $caps;
 	}
 
+	/**
+	 * @param array<int, string> $caps
+	 *
+	 * @return array<int, string>
+	 */
 	#[Filter('map_meta_cap', 1)]
 	public function editPrivacyPolicy(array $caps, string $cap, int $userId): array
 	{
@@ -38,10 +54,13 @@ class Authorization
 		return $caps;
 	}
 
-	#[Filter('map_meta_cap', 1)]
 	/**
+	 * @param array<int, string> $caps
 	 * @param array<int, mixed> $args
+	 *
+	 * @return array<int, string>
 	 */
+	#[Filter('map_meta_cap', 1)]
 	public function addCapabilityForEditingAttachments(array $caps, string $cap, int $userId, array $args): array
 	{
 		if ('edit_post' !== $cap || ! isset($args[0])) {
@@ -50,7 +69,7 @@ class Authorization
 
 		$post = get_post($args[0]);
 
-		if (! is_a($post, 'WP_Post') || 'attachment' !== $post->post_type) {
+		if (! $post instanceof \WP_Post || 'attachment' !== $post->post_type) {
 			return $caps;
 		}
 
@@ -61,10 +80,13 @@ class Authorization
 		return ['yard_edit_attachments'];
 	}
 
-	#[Filter('map_meta_cap', 1)]
 	/**
+	 * @param array<int, string> $caps
 	 * @param array<int, mixed> $args
+	 *
+	 * @return array<int, string>
 	 */
+	#[Filter('map_meta_cap', 1)]
 	public function addCapabilityForDeletingAttachments(array $caps, string $cap, int $userId, array $args): array
 	{
 		if ('delete_post' !== $cap || ! isset($args[0])) {
@@ -73,7 +95,7 @@ class Authorization
 
 		$post = get_post($args[0]);
 
-		if (! is_a($post, 'WP_Post') || 'attachment' !== $post->post_type) {
+		if (! $post instanceof \WP_Post || 'attachment' !== $post->post_type) {
 			return $caps;
 		}
 
@@ -127,7 +149,7 @@ class Authorization
 	}
 
 	#[Action('pre_get_users')]
-	public function hideAdminsFromNonAdmins($args): void
+	public function hideAdminsFromNonAdmins(\WP_User_Query $args): void
 	{
 		if (current_user_can('administrator')) {
 			return;
@@ -148,24 +170,44 @@ class Authorization
 		$args->query_vars['role__not_in'] = 'administrator';
 	}
 
+	/**
+	 * @param array<string, string> $views
+	 *
+	 * @return array<string, string>
+	 */
 	#[Filter('views_users')]
-	public function hideAdminCountFromNonAdmins($views)
+	public function hideAdminCountFromNonAdmins(array $views): array
 	{
-		if (current_user_can('administrator')) {
+		if (current_user_can('administrator') || ! isset($views['administrator'], $views['all'])) {
 			return $views;
 		}
 
-		preg_match('/\((\d+)\)/', $views['administrator'], $adminCount);
-		preg_match('/\((\d+)\)/', $views['all'], $allUsersCount);
+		$administratorView = $views['administrator'];
 
-		$newAllUsersCount = $allUsersCount[1] - $adminCount[1];
+		unset($views['administrator']);
 
-		$views['all'] = preg_replace('/\(\d+\)/', (string) $newAllUsersCount, $views['all']);
+		$adminCount = $this->parseViewCount($administratorView);
+		$allUsersCount = $this->parseViewCount($views['all']);
 
-		if (isset($views['administrator'])) {
-			unset($views['administrator']);
+		if (null === $adminCount || null === $allUsersCount) {
+			return $views;
 		}
 
+		$newAllUsersCount = max(0, $allUsersCount - $adminCount);
+
+		$views['all'] = preg_replace(self::VIEW_COUNT_PATTERN, '(' . number_format_i18n($newAllUsersCount) . ')', $views['all'], 1) ?? $views['all'];
+
 		return $views;
+	}
+
+	private function parseViewCount(string $view): ?int
+	{
+		if (1 !== preg_match(self::VIEW_COUNT_PATTERN, $view, $matches)) {
+			return null;
+		}
+
+		$digits = preg_replace('/\D/u', '', html_entity_decode($matches[1], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+
+		return null === $digits || '' === $digits ? null : (int) $digits;
 	}
 }

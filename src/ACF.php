@@ -15,6 +15,11 @@ class ACF
 		return false;
 	}
 
+	/**
+	 * @param array<string, mixed> $api
+	 *
+	 * @return array<string, mixed>
+	 */
 	#[Filter('acf/fields/google_map/api')]
 	public function my_acf_google_map_api(array $api): array
 	{
@@ -23,6 +28,11 @@ class ACF
 		return $api;
 	}
 
+	/**
+	 * @param array<int, string> $paths
+	 *
+	 * @return array<int, string>
+	 */
 	#[Filter('acf/settings/load_json')]
 	public function loadJson(array $paths): array
 	{
