@@ -1,5 +1,107 @@
 # CHANGELOG
 
+## [v3.3.0] - 2026-10-08
+
+-   Feat: add ERROR_ALWAYS_IGNITION to send diagnostics to Ignition
+-   Feat: show fatals on Ignition when Acorn is not handling them
+-   Feat: keep local notices non-fatal and drop CSP on Ignition page
+-   Fix: only wrap the error handler when Acorn installed it
+-   Fix: hand deprecations back to PHP so they show after Acorn boots
+-   Refactor: rename Dev to ErrorHandling and keep notices non-fatal by default
+-   Refactor: wrap Acorn handlers from one entry point
+
+## [v3.2.1] - 2026-10-07
+
+-   Feat: disable WP 7.1 text indent, fit text and block bindings panel
+-   Chore: hide Acorn version number
+
+## [v3.2.0] - 2026-10-05
+
+-   Feat: add BlockComponents to render registered blocks as Blade components
+-   Fix: register only dynamic blocks as Blade components
+
+## [v3.1.2] - 2026-09-29
+
+-   Feat: hide Simple History from all users outside of @yard.nl domain
+-   Fix: defer new tab notice translation until first use
+-   Fix: adjust plugin dir
+-   A11y: remove empty wp-block-headings from content
+-   Chore: remove login language dropdown
+
+## [v3.1.1] - 2026-09-14
+
+-   A11y: change ordered list to unordered list in Gravity Forms validation message
+
+## [v3.1.0] - 2026-09-10
+
+-   Feat: enable ElasticPress post_search by default, so new posts trigger a reindex
+
+## [v3.0.0] - 2026-09-03
+
+-   Feat!: Acorn 5 only (drop Acorn 4 / Laravel 10-11)
+
+## [v2.9.2] - 2026-09-03
+
+-   Chore: early returns for yard attachment capability hooks
+
+## [v2.9.1] - 2026-09-03
+
+-   Feat: add custom capability for deleting attachments
+-   Chore: remove duplicate security headers
+
+## [v2.9.0] - 2026-09-02
+
+-   Feat!: upgrade to Acorn 5 / Laravel 12
+-   Feat: support Acorn 4 & 5, restore CSP send_headers hook gated on nutshell version
+-   Chore: pin modern dev tooling (pest 3-5, testbench 10-11, larastan 3, phpstan-wordpress 2)
+-   Chore: stop tracking composer.lock
+
+## [v2.8.0] - 2026-09-01
+
+-   Feat: add Crosspost hook
+
+## [v2.7.9] - 2026-08-26
+
+-   Fix: bail out of PageGuard hook for v1 version
+
+## [v2.7.8] - 2026-08-24
+
+-   Fix: add guard to phone method
+
+## [v2.7.7] - 2026-08-14
+
+-   Feat: add PageGuard hook to add content owner to PDC internal information
+-   Fix: bump filter hook order above SEOPress
+
+## [v2.7.6] - 2026-08-13
+
+-   Feat: Simple History hooks
+-   Feat: add OneLogin SAML SSO hook
+-   Feat: add error code to yard-warden
+-   Fix: force loading of core block assets since WP 6.9
+-   Chore: additional guard when SSO is network active but not configured
+
+## [v2.7.5] - 2026-07-08
+
+-   Feat: disable file block embed preview by default
+
+## [v2.7.4] - 2026-07-07
+
+-   Feat: disable contentOnly update for unsynced patterns
+
+## [v2.7.3] - 2026-06-30
+
+-   Feat: add accessible iframe title to embed blocks
+-   Feat: force admin colors to modern color scheme
+
+## [v2.7.2] - 2026-06-22
+
+-   Fix: allow null $context in dashboardOptions capability filter
+
+## [v2.7.1] - 2026-06-19
+
+-   Feat: remove invalid autofocus from Gravity Forms validation summary
+
 ## [v2.7.0] - 2026-06-10
 
 -   Feat: translate non latin numerals
