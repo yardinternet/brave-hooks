@@ -10,7 +10,7 @@ use ReflectionException;
 class Config
 {
 	/**
-	 * @param array<int, class-string> $classNames
+	 * @param array<array-key, mixed> $classNames
 	 */
 	public function __construct(public array $classNames = [])
 	{
@@ -31,12 +31,20 @@ class Config
 	 */
 	public function classNames(): array
 	{
-		return collect($this->classNames)
-			->filter(fn ($className) => $this->classNameIsValid($className))
-			->filter(fn ($className) => $this->isPluginActive($className))
-			->toArray();
+		$classNames = [];
+
+		foreach ($this->classNames as $key => $className) {
+			if ($this->classNameIsValid($className) && $this->isPluginActive($className)) {
+				$classNames[$key] = $className;
+			}
+		}
+
+		return $classNames;
 	}
 
+	/**
+	 * @phpstan-assert-if-true class-string $className
+	 */
 	public function classNameIsValid(mixed $className): bool
 	{
 		if (! is_string($className)) {
@@ -47,6 +55,8 @@ class Config
 	}
 
 	/**
+	 * @param class-string $className
+	 *
 	 * @throws ReflectionException
 	 */
 	public function isPluginActive(string $className): bool
@@ -56,14 +66,8 @@ class Config
 
 		if (count($attributes) === 0) {
 			return true;
-		};
-
-		foreach ($attributes as $attribute) {
-			$plugin = $attribute->newInstance();
-
-			return $plugin->isActive();
 		}
 
-		return false;
+		return $attributes[0]->newInstance()->isActive();
 	}
 }

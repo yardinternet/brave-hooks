@@ -42,6 +42,11 @@ class Theme
 		add_post_type_support('page', 'excerpt');
 	}
 
+	/**
+	 * @param array<int, string> $classes
+	 *
+	 * @return array<int, string>
+	 */
 	#[Action('body_class')]
 	public function bodyClass(array $classes): array
 	{
@@ -74,14 +79,22 @@ class Theme
 		return $classes;
 	}
 
+	/**
+	 * @param array<int, string> $classes
+	 * @param \WP_Post&object{object: string, object_id: int|string} $item Menu item, decorated by wp_setup_nav_menu_item().
+	 *
+	 * @return array<int, string>
+	 */
 	#[Filter('nav_menu_css_class')]
 	public function addActiveMenuClass(array $classes, \WP_Post $item): array
 	{
-		if (! is_singular() || 'page' !== $item->object) {
+		$postId = get_the_ID();
+
+		if (! is_singular() || false === $postId || 'page' !== $item->object) {
 			return $classes;
 		}
 
-		$parentIds = $this->getParentIds(get_the_ID());
+		$parentIds = $this->getParentIds($postId);
 
 		if (count($parentIds) === 0) {
 			return $classes;
@@ -151,7 +164,7 @@ class Theme
 			$img->setAttribute('style', $style . ' ' . $objectPosition);
 		}
 
-		return $doc->saveHTML();
+		return $doc->saveHTML() ?: $html;
 	}
 
 	/**
@@ -216,7 +229,7 @@ class Theme
 				while ($el->firstChild) {
 					$span->appendChild($el->firstChild);
 				}
-				$el->parentNode->replaceChild($span, $el);
+				$el->parentNode?->replaceChild($span, $el);
 			}
 		};
 
@@ -258,7 +271,10 @@ class Theme
 
 	private function newTabNotice(): string
 	{
-		return config('theme.a11y_new_tab_notice', __('(opent in nieuw tabblad)', 'sage'));
+		$fallback = __('(opent in nieuw tabblad)', 'sage');
+		$notice = config('theme.a11y_new_tab_notice', $fallback);
+
+		return is_string($notice) ? $notice : $fallback;
 	}
 
 	/**

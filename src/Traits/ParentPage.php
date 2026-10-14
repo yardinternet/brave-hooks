@@ -6,10 +6,17 @@ namespace Yard\Brave\Hooks\Traits;
 
 trait ParentPage
 {
+	/**
+	 * @return array<int>
+	 */
 	private function getParentIds(int $postID): array
 	{
 		$postType = get_post_type($postID);
 		$parentIds = [];
+
+		if (false === $postType) {
+			return $parentIds;
+		}
 
 		if (is_post_type_hierarchical($postType) && has_post_parent($postID)) {
 			$parentIds = get_post_ancestors($postID);
@@ -20,18 +27,24 @@ trait ParentPage
 		return $parentIds;
 	}
 
-	private function hasParentPage(int|bool $postId): bool
+	private function hasParentPage(int $postId): bool
 	{
-		return post_type_supports(get_post_type($postId), 'parent-page');
+		$postType = get_post_type($postId);
+
+		return false !== $postType && post_type_supports($postType, 'parent-page');
 	}
 
+	/**
+	 * @return array<int>
+	 */
 	private function getParentPagesIds(int $postId): array
 	{
-		if (! $this->hasParentPage($postId)) {
+		$postType = get_post_type($postId);
+
+		if (false === $postType || ! post_type_supports($postType, 'parent-page')) {
 			return [];
 		}
 
-		$postType = get_post_type($postId);
 		$supports = get_all_post_type_supports($postType);
 		$parentPageSlug = $supports['parent-page'][0]['slug'] ?? get_post_type_object($postType)->rewrite['slug'] ?? null;
 		$parent = $parentPageSlug ? get_page_by_path($parentPageSlug) : null;

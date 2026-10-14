@@ -36,6 +36,11 @@ class GravityForms
 		return true;
 	}
 
+	/**
+	 * @param array<string, mixed> $form
+	 *
+	 * @return array<string, mixed>
+	 */
 	#[Filter('gform_form_args')]
 	public function showFormsUsingAjax(array $form): array
 	{
@@ -54,6 +59,11 @@ class GravityForms
 		return 'gravity-theme';
 	}
 
+	/**
+	 * @param array<string, array<string, mixed>> $phoneFormats
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
 	#[Filter('gform_phone_formats')]
 	public function nlPhoneFormat(array $phoneFormats): array
 	{
@@ -69,6 +79,8 @@ class GravityForms
 
 	/**
 	 * Add necessary disclaimer if reCAPTCHA v3 plugin is activated and is not disabled for the current form
+	 *
+	 * @param array<string, mixed> $form
 	 */
 	#[Filter('gform_get_form_filter')]
 	public function addRecaptchaDisclaimer(string $formString, array $form): string
@@ -127,6 +139,10 @@ class GravityForms
 
 	/**
 	 * A11y: add role="alert" to confirmation message
+	 *
+	 * @param string|array<string, mixed> $confirmation
+	 *
+	 * @return string|array<string, mixed>
 	 */
 	#[Filter('gform_confirmation')]
 	public function addRoleAlertToConfirmation(string|array $confirmation): string|array
@@ -141,6 +157,12 @@ class GravityForms
 
 	/**
 	 * A11y: change default required field message to something more descriptive.
+	 *
+	 * @param array<string, mixed> $result
+	 * @param string|array<mixed> $value
+	 * @param array<string, mixed> $form
+	 *
+	 * @return array<string, mixed>
 	 */
 	#[Filter('gform_field_validation')]
 	public function changeRequiredFieldValidationMessage(array $result, string|array $value, array $form, \GF_Field $field): array
@@ -179,6 +201,11 @@ class GravityForms
 		);
 	}
 
+	/**
+	 * @param array<string, array<string, mixed>> $attributes
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
 	#[Filter('gform_form_block_attributes')]
 	public function changeGformBlockAttributes(array $attributes): array
 	{
@@ -187,6 +214,9 @@ class GravityForms
 		return $attributes;
 	}
 
+	/**
+	 * @param array<string, mixed> $form
+	 */
 	#[Action('gform_after_save_form')]
 	public function defaultSettings(array $form): void
 	{
@@ -211,8 +241,9 @@ class GravityForms
 	}
 
 	/**
-	 * Determine if form is active by form meta.
-	 * Without passing the is_active flag the form will be set to inactive by GF.
+	 * @param array<string, mixed> $form
+	 *
+	 * @return array<string, mixed>
 	 */
 	protected function setActive(array $form): array
 	{
@@ -225,7 +256,9 @@ class GravityForms
 	}
 
 	/**
-	 * Honeypot enabled by default.
+	 * @param array<string, mixed> $form
+	 *
+	 * @return array<string, mixed>
 	 */
 	protected function enableHoneypot(array $form): array
 	{
@@ -241,7 +274,9 @@ class GravityForms
 	}
 
 	/**
-	 * Retain entries days limitation.
+	 * @param array<string, mixed> $form
+	 *
+	 * @return array<string, mixed>
 	 */
 	protected function setRetainEntriesDays(array $form): array
 	{
@@ -259,7 +294,9 @@ class GravityForms
 	}
 
 	/**
-	 * Prevent IP to be saved.
+	 * @param array<string, mixed> $form
+	 *
+	 * @return array<string, mixed>
 	 */
 	protected function preventIPSaving(array $form): array
 	{
@@ -275,7 +312,9 @@ class GravityForms
 	}
 
 	/**
-	 * A11y: force validation summary.
+	 * @param array<string, mixed> $form
+	 *
+	 * @return array<string, mixed>
 	 */
 	protected function enableValidationSummary(array $form): array
 	{
@@ -289,7 +328,9 @@ class GravityForms
 	}
 
 	/**
-	 * A11y: force enable autocomplete for some field types.
+	 * @param array<string, mixed> $form
+	 *
+	 * @return array<string, mixed>
 	 */
 	protected function enableAutocomplete(array $form): array
 	{
@@ -304,6 +345,11 @@ class GravityForms
 		return $form;
 	}
 
+	/**
+	 * @param array<string, mixed> $form
+	 *
+	 * @return array<string, mixed>
+	 */
 	#[Filter('gform_export_fields')]
 	public function mergeMultiInputFieldsForExport(array $form): array
 	{
@@ -328,7 +374,7 @@ class GravityForms
 	}
 
 	#[Filter('sanitize_file_name')]
-	public function translateNumeralsToLatin(string $fileName)
+	public function translateNumeralsToLatin(string $fileName): string
 	{
 		// regex matches to single digits
 		return preg_replace_callback('/./u', function ($m) {
@@ -339,6 +385,6 @@ class GravityForms
 			* In that case keep the original character unchanged.
 			*/
 			return -1 === $v ? $m[0] : (string) $v;
-		}, $fileName);
+		}, $fileName) ?? $fileName;
 	}
 }

@@ -12,14 +12,21 @@ class SEOPress
 {
 	use ParentPage;
 
+	/**
+	 * @param array<int, array<int, mixed>> $breadcrumbs
+	 *
+	 * @return array<int, array<int, mixed>>
+	 */
 	#[Filter('seopress_pro_breadcrumbs_crumbs')]
 	public function addBreadcrumb(array $breadcrumbs): array
 	{
-		if (! $this->hasParentPage(get_the_ID()) || is_search()) {
+		$postId = get_the_ID();
+
+		if (false === $postId || is_search()) {
 			return $breadcrumbs;
 		}
 
-		$parentIds = $this->getParentPagesIds(get_the_ID());
+		$parentIds = $this->getParentPagesIds($postId);
 		if (empty($parentIds)) {
 			return $breadcrumbs;
 		}

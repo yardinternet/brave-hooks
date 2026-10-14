@@ -8,3 +8,5 @@ parameters:
     tmpDir: build/phpstan
     scanFiles:
         - vendor/php-stubs/gravity-forms-stubs/gravity-forms-stubs.php
+        - stubs/acorn.php
+        - stubs/plugins.php

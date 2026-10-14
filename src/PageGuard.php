@@ -36,7 +36,7 @@ class PageGuard
 
 		$email = $contentOwner->email();
 		$name = $contentOwner->name();
-		$phoneNumber = method_exists($contentOwner, 'phone') ? $contentOwner->phone() : '';
+		$phoneNumber = is_object($contentOwner) && method_exists($contentOwner, 'phone') ? $contentOwner->phone() : '';
 
 		$contentOwnerInfo = 'Inhoudseigenaar: ' . ($email ?
 			sprintf(
