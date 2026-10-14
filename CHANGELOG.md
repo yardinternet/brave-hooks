@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [NEXT] -
+## [v3.4.1] - 2026-10-14
 
 -   Fix: treat feeds as XML in Weglot so tag names keep their case
 -   Fix: resolve phpstan errors
