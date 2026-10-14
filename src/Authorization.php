@@ -12,8 +12,9 @@ class Authorization
 	/**
 	 * Matches a localized count such as "(1,234)", "(1&nbsp;234)" or "(1’234)".
 	 * Any thousands separator is accepted, as long as the count starts and ends with a digit.
+	 * No `u` flag on purpose: `\d` must stay ASCII-only, since `(int)` can't cast other Unicode digits.
 	 */
-	private const VIEW_COUNT_PATTERN = '/\((\d(?:[^()<>]*\d)?)\)/u';
+	private const VIEW_COUNT_PATTERN = '/\((\d(?:[^()<>]*\d)?)\)/';
 
 	/**
 	 * @param array<int, string> $caps
@@ -206,7 +207,7 @@ class Authorization
 			return null;
 		}
 
-		$digits = preg_replace('/\D/u', '', html_entity_decode($matches[1], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+		$digits = preg_replace('/\D/', '', html_entity_decode($matches[1], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
 		return null === $digits || '' === $digits ? null : (int) $digits;
 	}
