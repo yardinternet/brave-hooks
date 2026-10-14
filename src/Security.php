@@ -20,6 +20,11 @@ class Security
 		header('Permissions-Policy: accelerometer=(),autoplay=(self),camera=(),display-capture=(),encrypted-media=(),fullscreen=(*),geolocation=(),gyroscope=(),magnetometer=(),microphone=(),midi=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),screen-wake-lock=(),sync-xhr=(self),usb=(),xr-spatial-tracking=()');
 	}
 
+	/**
+	 * @param array<string, string|bool> $attributes
+	 *
+	 * @return array<string, string|bool>
+	 */
 	#[Filter('wp_script_attributes')]
 	#[Filter('wp_inline_script_attributes')]
 	public function addScriptNonce(array $attributes): array
@@ -35,6 +40,9 @@ class Security
 		return false;
 	}
 
+	/**
+	 * @param array<string, mixed> $meta
+	 */
 	#[Filter('wpmu_signup_user_notification')]
 	public function handleUserSignup(string $user_login, string $user_email, string $key, array $meta): bool
 	{
@@ -53,6 +61,9 @@ class Security
 		return false;
 	}
 
+	/**
+	 * @param array<string, mixed> $meta
+	 */
 	#[Filter('wpmu_welcome_user_notification')]
 	public function handleWelcomeEmail(int $user_id, string $password, array $meta): bool
 	{
@@ -67,6 +78,9 @@ class Security
 		return true;
 	}
 
+	/**
+	 * @param array<string, mixed> $meta
+	 */
 	#[Filter('update_welcome_user_email')]
 	public function customizeWelcomeEmailContent(string $welcome_email, int $user_id, string $password, array $meta): string
 	{

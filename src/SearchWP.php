@@ -21,6 +21,11 @@ class SearchWP
 		return false;
 	}
 
+	/**
+	 * @param array<string, mixed> $args
+	 *
+	 * @return array<string, mixed>
+	 */
 	#[Filter('searchwp\swp_query\args')]
 	public function changePostsPerPage(array $args): array
 	{

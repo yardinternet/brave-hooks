@@ -11,6 +11,11 @@ use Yard\Hook\Filter;
 #[Plugin('rudr-simple-wp-crosspost/rudr-simple-wp-crosspost.php')]
 class SimpleWPCrosspost
 {
+	/**
+	 * @param array<string, mixed> $field
+	 *
+	 * @return array<string, mixed>
+	 */
 	#[Filter('acf/load_field/name=publication_source')]
 	public function populatePublicationSourceField(array $field): array
 	{
@@ -23,6 +28,12 @@ class SimpleWPCrosspost
 		return $field;
 	}
 
+	/**
+	 * @param array<string, mixed> $data
+	 * @param array<string, mixed> $blog
+	 *
+	 * @return array<string, mixed>
+	 */
 	#[Filter('rudr_swc_pre_crosspost_post_data', 10)]
 	public function resyncModifiedFeaturedImage(array $data, array $blog, WP_Post $post, string $action): array
 	{

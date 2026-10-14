@@ -3,6 +3,7 @@
 ## [NEXT] -
 
 -   Fix: treat feeds as XML in Weglot so tag names keep their case
+-   Fix: resolve phpstan errors
 
 ## [v3.3.0] - 2026-10-08
 

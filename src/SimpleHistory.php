@@ -23,6 +23,9 @@ class SimpleHistory
 		return $daysBeforePurge;
 	}
 
+	/**
+	 * @return array<int, string>
+	 */
 	#[Filter('simple_history/stealth_mode_allowed_emails')]
 	public function setAllowedEmails(): array
 	{

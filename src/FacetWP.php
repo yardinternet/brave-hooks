@@ -24,6 +24,11 @@ class FacetWP
 		return true;
 	}
 
+	/**
+	 * @param array<string, mixed> $output
+	 *
+	 * @return array<string, mixed>
+	 */
 	#[Filter('facetwp_render_output')]
 	public function setHighlightSearchTerm(array $output): array
 	{
@@ -52,10 +57,6 @@ class FacetWP
 		}
 
 		foreach ($parts as $index => $part) {
-			if (! is_string($part)) {
-				continue;
-			}
-
 			if ('' === trim($part) || str_starts_with($part, '<')) {
 				continue;
 			}
@@ -66,18 +67,28 @@ class FacetWP
 		return implode('', $parts);
 	}
 
+	/**
+	 * @param array<int, mixed> $facets
+	 *
+	 * @return array<int, mixed>
+	 */
 	#[Filter('facetwp_facets')]
 	public function addFacets(array $facets): array
 	{
-		$config = config('facetwp.facets');
+		$config = config_array('facetwp.facets');
 
 		return [...$facets, ...$config];
 	}
 
+	/**
+	 * @param array<int, mixed> $templates
+	 *
+	 * @return array<int, mixed>
+	 */
 	#[Filter('facetwp_templates')]
 	public function addTemplates(array $templates): array
 	{
-		$config = config('facetwp.templates');
+		$config = config_array('facetwp.templates');
 
 		return [...$templates, ...$config];
 	}
@@ -123,6 +134,11 @@ class FacetWP
 		return env('GOOGLE_MAPS_API_KEY', '');
 	}
 
+	/**
+	 * @param array<string, mixed> $options
+	 *
+	 * @return array<string, mixed>
+	 */
 	#[Filter('facetwp_proximity_autocomplete_options')]
 	public function setProximityAutocompleteOptions(array $options): array
 	{
@@ -144,6 +160,8 @@ class FacetWP
 
 	/**
 	 * A11y: Change pager wrapper from <div> to <ul>
+	 *
+	 * @param array<string, mixed> $params
 	 */
 	#[Filter('facetwp_facet_html')]
 	public function changePagerWrapperTag(string $html, array $params): string
@@ -158,6 +176,8 @@ class FacetWP
 
 	/**
 	 * A11y: Change the pager links
+	 *
+	 * @param array<string, mixed> $params
 	 */
 	#[Filter('facetwp_facet_pager_link')]
 	public function changePagerLinks(string $html, array $params): string

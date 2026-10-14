@@ -20,7 +20,7 @@ class HookServiceProvider extends PackageServiceProvider
 	public function packageRegistered(): void
 	{
 		$this->app->bind(Registrar::class, function () {
-			$config = Config::from(config('hooks'));
+			$config = Config::from(config_array('hooks'));
 
 			return new Registrar($config->classNames());
 		});
