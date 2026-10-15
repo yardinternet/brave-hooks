@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v3.4.2] - 2026-10-15
+
+-   Fix: transliterate non-ASCII upload file names to ASCII in Gravity Forms so upload URLs stay reachable and attachments reach notification emails
+
 ## [v3.4.1] - 2026-10-14
 
 -   Fix: treat feeds as XML in Weglot so tag names keep their case
