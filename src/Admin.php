@@ -26,4 +26,13 @@ class Admin
 	{
 		return false;
 	}
+
+	/**
+	 * Disable note mails to the post author
+	 */
+	#[Filter('pre_option_wp_notes_notify')]
+	public function disableNoteNotifications(): string
+	{
+		return '0';
+	}
 }
