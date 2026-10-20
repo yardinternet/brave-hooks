@@ -15,6 +15,7 @@ return [
 	'gravityforms' => Yard\Brave\Hooks\GravityForms::class,
 	'gutenberg' => Yard\Brave\Hooks\Gutenberg::class,
 	'imagify' => Yard\Brave\Hooks\Imagify::class,
+	'kcc' => Yard\Brave\Hooks\Kcc::class,
 	'onelogin' => Yard\Brave\Hooks\OneloginSSO::class,
 	'openid-connect' => Yard\Brave\Hooks\OpenIDConnect::class,
 	'searchwp' => Yard\Brave\Hooks\SearchWP::class,
