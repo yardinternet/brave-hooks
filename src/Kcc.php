@@ -17,11 +17,11 @@ class Kcc
 	public function listingTemplate(): string
 	{
 		return <<<'TEMPLATE'
-<?php if (view()->exists('blocks.FacetWP.loops.kcc-loop')) : ?>
-	<?php echo view('blocks.FacetWP.loops.kcc-loop'); ?>
-<?php else : ?>
-	<p>Template <code>blocks.FacetWP.loops.kcc-loop</code> kan niet gevonden worden.</p>
-<?php endif; ?>
-TEMPLATE;
+			<?php if (view()->exists('blocks.FacetWP.loops.kcc-loop')) : ?>
+				<?php echo view('blocks.FacetWP.loops.kcc-loop'); ?>
+			<?php else : ?>
+				<p>Template <code>blocks.FacetWP.loops.kcc-loop</code> kan niet gevonden worden.</p>
+			<?php endif; ?>
+		TEMPLATE;
 	}
 }
