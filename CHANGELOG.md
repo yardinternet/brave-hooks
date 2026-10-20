@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v3.4.3] - 2026-10-20
+
+-   Feat: render the KCC FacetWP listing through the theme's kcc-loop view, with a message when the view is missing
+-   Feat: disable WordPress note notification emails
+
 ## [v3.4.2] - 2026-10-15
 
 -   Fix: transliterate non-ASCII upload file names to ASCII in Gravity Forms so upload URLs stay reachable and attachments reach notification emails
