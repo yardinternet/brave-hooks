@@ -5,11 +5,33 @@ declare(strict_types=1);
 namespace Yard\Brave\Hooks;
 
 use Yard\Hook\Action;
+use Yard\Hook\Filter;
 use Yoast\WP\Duplicate_Post\Permissions_Helper;
 
 #[Plugin('duplicate-post/duplicate-post.php')]
 class DuplicatePost
 {
+	/**
+	 * Enables duplication for all post types except excluded ones, overriding the plugin settings.
+	 *
+	 * @return string[]
+	 */
+	#[Filter('option_duplicate_post_types_enabled')]
+	public function enableAllPostTypes(): array
+	{
+		$defaultExcluded = [
+			'acf-ui-options-page',
+			'ep-pointer',
+			'seopress_404',
+			'seopress_bot',
+			'seopress_schemas',
+			'wp_navigation',
+		];
+		$excluded = (array) apply_filters('yard::brave-hooks/duplicate-post-excluded-post-types', $defaultExcluded);
+
+		return array_values(array_diff(get_post_types(['show_ui' => true]), $excluded));
+	}
+
 	// This is a workaround for the Duplicate Post plugin to save revisions for the rewrite and republish copy
 	// Can be removed when this issue is fixed: https://github.com/Yoast/duplicate-post/issues/404
 	#[Action('load-post.php')]
