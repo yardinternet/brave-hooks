@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [v3.5.0] - 2026-10-27
+
+-   Feat: seopress add default meta templates
+-   Feat: duplicate post enable post types
+
 ## [v3.4.3] - 2026-10-20
 
 -   Feat: render the KCC FacetWP listing through the theme's kcc-loop view, with a message when the view is missing
