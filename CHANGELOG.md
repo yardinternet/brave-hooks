@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [v3.5.1] - 2026-10-31
+
+-   Fix: only strip fittext from array typography supports
+
 ## [v3.5.0] - 2026-10-27
 
 -   Feat: seopress add default meta templates
