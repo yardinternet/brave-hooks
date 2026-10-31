@@ -269,7 +269,10 @@ class Gutenberg
 	#[Filter('block_type_metadata')]
 	public function disableFitText(array $metadata): array
 	{
-		unset($metadata['supports']['typography']['fitText']);
+		// Plugin blocks can declare typography support as a bool (WooCommerce's category-title: `"typography": true`)
+		if (is_array($metadata['supports']['typography'] ?? null)) {
+			unset($metadata['supports']['typography']['fitText']);
+		}
 
 		return $metadata;
 	}
