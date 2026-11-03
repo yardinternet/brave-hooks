@@ -20,6 +20,11 @@ it('romanises non-ascii file names so the upload URL stays reachable', function 
 	'plain ascii is untouched' => ['normal-file_1.JPG', 'normal-file_1.JPG'],
 ]);
 
+it('does not add a trailing dot to names without an extension', function () {
+	expect($this->gravityForms->transliterateFileNameToAscii('silence'))->toBe('silence')
+		->and($this->gravityForms->transliterateFileNameToAscii('single-event-blocks'))->toBe('single-event-blocks');
+});
+
 it('keeps the file name safe for the filesystem', function () {
 	$fileName = $this->gravityForms->transliterateFileNameToAscii('../../etc/passwd');
 

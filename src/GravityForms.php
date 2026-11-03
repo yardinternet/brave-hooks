@@ -401,6 +401,7 @@ class GravityForms
 		// fe: Arabic letter ayn is changed into ` which is a valid ascii character but not a valid filename character
 		$baseName = trim((string) preg_replace('/[^A-Za-z0-9_-]+/', '-', $baseName), '-');
 
-		return $baseName . '.' . $extension;
+		// Plugins also sanitize bare template slugs (fe TEC's 'silence'), which must not gain a trailing dot.
+		return '' === $extension ? $baseName : $baseName . '.' . $extension;
 	}
 }
