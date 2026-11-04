@@ -25,6 +25,19 @@ it('does not add a trailing dot to names without an extension', function () {
 		->and($this->gravityForms->transliterateFileNameToAscii('single-event-blocks'))->toBe('single-event-blocks');
 });
 
+it('keeps dots inside the name', function (string $fileName, string $expected) {
+	expect($this->gravityForms->transliterateFileNameToAscii($fileName))->toBe($expected);
+})->with([
+	// FAZ Cookie Manager loads its banner from templates/<version>/template.json.
+	'version slug' => ['6.2.0', '6.2.0'],
+	'dotted upload name' => ['jaarverslag.v2.pdf', 'jaarverslag.v2.pdf'],
+]);
+
+it('does not leave consecutive or edge dots in the name', function () {
+	expect($this->gravityForms->transliterateFileNameToAscii('...jpg'))->not->toContain('..')
+		->and($this->gravityForms->transliterateFileNameToAscii('a..b.jpg'))->toBe('a.b.jpg');
+});
+
 it('keeps the file name safe for the filesystem', function () {
 	$fileName = $this->gravityForms->transliterateFileNameToAscii('../../etc/passwd');
 
