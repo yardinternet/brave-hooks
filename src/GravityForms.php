@@ -399,7 +399,9 @@ class GravityForms
 
 		// fallback regex to change any characters that still do not match a valid filename
 		// fe: Arabic letter ayn is changed into ` which is a valid ascii character but not a valid filename character
-		$baseName = trim((string) preg_replace('/[^A-Za-z0-9_-]+/', '-', $baseName), '-');
+		$baseName = (string) preg_replace('/[^A-Za-z0-9._-]+/', '-', $baseName);
+		// Dots are kept because plugins sanitize dotted slugs (fe FAZ Cookie Manager's '6.2.0' template folder); runs of dots are collapsed.
+		$baseName = trim((string) preg_replace('/\.{2,}/', '.', $baseName), '-.');
 
 		// Plugins also sanitize bare template slugs (fe TEC's 'silence'), which must not gain a trailing dot.
 		return '' === $extension ? $baseName : $baseName . '.' . $extension;
