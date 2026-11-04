@@ -389,19 +389,25 @@ class GravityForms
 		// https://unicode-org.github.io/icu/userguide/transforms/general/#icu-transliterators
 		$transliterator = Transliterator::create('Any-Latin; Latin-ASCII');
 
-		if ($transliterator instanceof Transliterator) {
-			$transliterated = $transliterator->transliterate($baseName);
+		// Dots are kept because plugins sanitize dotted slugs (fe FAZ Cookie Manager's '6.2.0' template folder).
+		// Only the dots WordPress already saw survive: each segment is cleaned on its own, so a character that
+		// transliterates to a dot (fe fullwidth '．') cannot slip past WordPress's intermediate-extension check.
+		$segments = array_map(function (string $segment) use ($transliterator): string {
+			if ($transliterator instanceof Transliterator) {
+				$transliterated = $transliterator->transliterate($segment);
 
-			if (is_string($transliterated)) {
-				$baseName = $transliterated;
+				if (is_string($transliterated)) {
+					$segment = $transliterated;
+				}
 			}
-		}
 
-		// fallback regex to change any characters that still do not match a valid filename
-		// fe: Arabic letter ayn is changed into ` which is a valid ascii character but not a valid filename character
-		$baseName = (string) preg_replace('/[^A-Za-z0-9._-]+/', '-', $baseName);
-		// Dots are kept because plugins sanitize dotted slugs (fe FAZ Cookie Manager's '6.2.0' template folder); runs of dots are collapsed.
-		$baseName = trim((string) preg_replace('/\.{2,}/', '.', $baseName), '-.');
+			// fallback regex to change any characters that still do not match a valid filename
+			// fe: Arabic letter ayn is changed into ` which is a valid ascii character but not a valid filename character
+			return trim((string) preg_replace('/[^A-Za-z0-9_-]+/', '-', $segment), '-');
+		}, explode('.', $baseName));
+
+		// Dropping empty segments collapses runs of dots and removes leading/trailing dots.
+		$baseName = implode('.', array_filter($segments, fn (string $segment): bool => '' !== $segment));
 
 		// Plugins also sanitize bare template slugs (fe TEC's 'silence'), which must not gain a trailing dot.
 		return '' === $extension ? $baseName : $baseName . '.' . $extension;

@@ -38,6 +38,12 @@ it('does not leave consecutive or edge dots in the name', function () {
 		->and($this->gravityForms->transliterateFileNameToAscii('a..b.jpg'))->toBe('a.b.jpg');
 });
 
+it('does not turn transliterated characters into dots', function () {
+	// WordPress checks intermediate extensions (payload.php.jpg -> payload.php_.jpg) before this filter runs;
+	// a fullwidth full stop (U+FF0E) passes that check and must not become a real dot afterwards.
+	expect($this->gravityForms->transliterateFileNameToAscii('payload．php.jpg'))->toBe('payload-php.jpg');
+});
+
 it('keeps the file name safe for the filesystem', function () {
 	$fileName = $this->gravityForms->transliterateFileNameToAscii('../../etc/passwd');
 
