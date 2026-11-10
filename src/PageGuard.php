@@ -29,35 +29,15 @@ class PageGuard
 		}
 
 		$contentOwner = (new ReviewItem($post))->contentOwner();
+		$contentOwnerHtml = is_object($contentOwner) && method_exists($contentOwner, 'toHtml') ? $contentOwner->toHtml() : '';
 
-		if (! $contentOwner) {
+		if ('' === $contentOwnerHtml) {
 			return $internalInformation;
-		}
-
-		$email = $contentOwner->email();
-		$name = $contentOwner->name();
-		$phoneNumber = is_object($contentOwner) && method_exists($contentOwner, 'phone') ? $contentOwner->phone() : '';
-
-		$contentOwnerInfo = 'Inhoudseigenaar: ' . ($email ?
-			sprintf(
-				'<a href="%s">%s</a>',
-				esc_url('mailto:' . $email),
-				esc_html($name)
-			)
-				: esc_html($name));
-
-		if ('' !== $phoneNumber) {
-			$phoneInfo = sprintf(
-				'<a href="%s">%s</a>',
-				esc_url('tel:' . $phoneNumber),
-				esc_html($phoneNumber)
-			);
-			$contentOwnerInfo .= sprintf(' (%s)', $phoneInfo);
 		}
 
 		$internalInformation[] = [
 			'internal_information_title' => __('Inhoudscontrole', 'sage'),
-			'internal_information_content' => $contentOwnerInfo,
+			'internal_information_content' => 'Inhoudseigenaar: ' . $contentOwnerHtml,
 		];
 
 		return $internalInformation;
