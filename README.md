@@ -2,7 +2,7 @@
 
 [![Code Style](https://github.com/yardinternet/brave-hooks/actions/workflows/format-php.yml/badge.svg?no-cache)](https://github.com/yardinternet/brave-hooks/actions/workflows/format-php.yml)
 ![Packagist Dependency Version](https://img.shields.io/packagist/dependency-v/yard/brave-hooks/php)
-![Packagist Dependency Version](https://img.shields.io/packagist/dependency-v/yard/brave-hooks/roots%2Facorn)
+![Packagist Dependency Version](https://img.shields.io/packagist/dependency-v/yard/brave-hooks/illuminate%2Fsupport)
 
 ## Features
 
@@ -31,6 +31,10 @@
    ```
 
 5. Register all your project hooks in the published configuration file `config/hooks.php`.
+
+### Fusion
+
+Works with Acorn 5 and [Fusion](https://github.com/yardinternet/fusion-framework) 6. On Fusion the service provider is discovered automatically. The CSP header comes from `Spatie\Csp\AddCspHeaders`, so add it to `$middleware` in `app/Http/Kernel.php`. Hook classes can be replaced or disabled (`null`) per key in the project's `config/hooks.php`.
 
 ## Usage
 
