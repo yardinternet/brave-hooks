@@ -21,6 +21,12 @@ class Admin
 		remove_action('admin_color_scheme_picker', 'admin_color_scheme_picker');
 	}
 
+	#[Action('admin_enqueue_scripts')]
+	public function showMenuSeparatorLines(): void
+	{
+		wp_add_inline_style('admin-menu', '#adminmenu li.wp-menu-separator { height: 1px; margin: 8px 10px; background: rgba(240, 246, 252, .15); }');
+	}
+
 	#[Filter('login_display_language_dropdown')]
 	public function disableLoginLanguageDropdown(): bool
 	{
