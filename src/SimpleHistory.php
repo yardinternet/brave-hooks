@@ -7,6 +7,7 @@ namespace Yard\Brave\Hooks;
 use Yard\Hook\Filter;
 
 #[Plugin('simple-history/index.php')]
+#[Plugin('wordpress-simple-history/index.php')]
 class SimpleHistory
 {
 	#[Filter('simple_history/show_promo_boxes')]

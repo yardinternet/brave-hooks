@@ -68,6 +68,12 @@ class Config
 			return true;
 		}
 
-		return $attributes[0]->newInstance()->isActive();
+		foreach ($attributes as $attribute) {
+			if ($attribute->newInstance()->isActive()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
