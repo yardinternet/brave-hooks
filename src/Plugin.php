@@ -6,7 +6,7 @@ namespace Yard\Brave\Hooks;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_CLASS)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 class Plugin
 {
 	public function __construct(
