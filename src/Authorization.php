@@ -56,6 +56,23 @@ class Authorization
 	}
 
 	/**
+	 * When Privacy is the only Settings page a user can open, core moves the Settings menu onto it
+	 * but keeps asking for manage_options, then drops the menu and denies options-privacy.php.
+	 * Who may open it is still decided by the cap; this only makes the menu ask for the right one.
+	 */
+	#[Action('admin_menu')]
+	public function keepPrivacySettingsReachable(): void
+	{
+		global $menu;
+
+		foreach ($menu as $position => $item) {
+			if ('options-privacy.php' === $item[2]) {
+				$menu[$position][1] = 'manage_privacy_options';
+			}
+		}
+	}
+
+	/**
 	 * @param array<int, string> $caps
 	 * @param array<int, mixed> $args
 	 *
