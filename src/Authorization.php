@@ -39,17 +39,14 @@ class Authorization
 	 * @param array<int, string> $caps
 	 *
 	 * @return array<int, string>
+	 *
+	 * @see https://core.trac.wordpress.org/ticket/44176
 	 */
 	#[Filter('map_meta_cap', 1)]
 	public function editPrivacyPolicy(array $caps, string $cap, int $userId): array
 	{
-		if (! is_user_logged_in()) {
-			return $caps;
-		}
-
-		if ('manage_privacy_options' === $cap && (user_can($userId, 'yard_edit_privacy_policy'))) {
-			$manageCap = is_multisite() ? 'manage_network' : 'manage_options';
-			$caps = array_diff($caps, [ $manageCap ]);
+		if ('manage_privacy_options' === $cap && user_can($userId, 'yard_edit_privacy_policy')) {
+			return ['yard_edit_privacy_policy'];
 		}
 
 		return $caps;
@@ -59,14 +56,20 @@ class Authorization
 	 * When Privacy is the only Settings page a user can open, core moves the Settings menu onto it
 	 * but keeps asking for manage_options, then drops the menu and denies options-privacy.php.
 	 * Who may open it is still decided by the cap; this only makes the menu ask for the right one.
+	 *
+	 * @see https://core.trac.wordpress.org/ticket/44176
 	 */
 	#[Action('admin_menu')]
 	public function keepPrivacySettingsReachable(): void
 	{
 		global $menu;
 
+		if (! is_array($menu)) {
+			return;
+		}
+
 		foreach ($menu as $position => $item) {
-			if ('options-privacy.php' === $item[2]) {
+			if (isset($item[2]) && 'options-privacy.php' === $item[2]) {
 				$menu[$position][1] = 'manage_privacy_options';
 			}
 		}
