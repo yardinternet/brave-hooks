@@ -94,7 +94,6 @@ class Scripts
 		]);
 	}
 
-
 	#[Action('wp_footer')]
 	public function addGoogleAnalyticsScript(): void
 	{
