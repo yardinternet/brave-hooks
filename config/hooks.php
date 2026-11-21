@@ -18,6 +18,7 @@ return [
 	'kcc' => Yard\Brave\Hooks\Kcc::class,
 	'onelogin' => Yard\Brave\Hooks\OneloginSSO::class,
 	'openid-connect' => Yard\Brave\Hooks\OpenIDConnect::class,
+	'scripts' => Yard\Brave\Hooks\Scripts::class,
 	'searchwp' => Yard\Brave\Hooks\SearchWP::class,
 	'security' => Yard\Brave\Hooks\Security::class,
 	'seopress' => Yard\Brave\Hooks\SEOPress::class,
