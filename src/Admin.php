@@ -21,6 +21,9 @@ class Admin
 		remove_action('admin_color_scheme_picker', 'admin_color_scheme_picker');
 	}
 
+	/**
+	 * @since 3.5.4
+	 */
 	#[Action('admin_enqueue_scripts')]
 	public function showMenuSeparatorLines(): void
 	{
