@@ -72,9 +72,10 @@ class Scripts
 			return;
 		}
 
-		wp_print_inline_script_tag(<<<'JS'
+		$monsidoIdJson = wp_json_encode((string) $monsidoId);
+		wp_print_inline_script_tag(<<<JS
 			window._monsido = window._monsido || {
-				token: "{$monsidoId}",
+				token: {$monsidoIdJson},
 				statistics: {
 					enabled: true,
 					cookieLessTracking: true,
