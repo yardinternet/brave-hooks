@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [NEXT] - 2026-11
+## [v3.5.6] - 2026-11-27
 
 -   Refactor: euro symbol before amount in GF price fields
 
