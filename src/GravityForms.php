@@ -420,7 +420,7 @@ class GravityForms
 	 *
 	 * @return array<string, array<string, string|int>>
 	 *
-	 * @since NEXT
+	 * @since 3.5.6
 	 */
 	#[Filter('gform_currencies', 10)]
 	public function placeEuroSymbolBeforeAmount(array $currencies): array
