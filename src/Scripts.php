@@ -102,11 +102,12 @@ class Scripts
 			return;
 		}
 
-		wp_print_inline_script_tag(<<<'JS'
+		$gaIdJson = wp_json_encode((string) $gaId);
+		wp_print_inline_script_tag(<<<JS
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
-			gtag('config', '{$gaId}');
+			gtag('config', {$gaIdJson});
 			JS);
 
 		wp_print_script_tag([
