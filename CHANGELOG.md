@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## [v3.5.5] - 2026-11-20
+
+-   Fix: register Simple History hooks when the plugin is installed as wordpress-simple-history
+-   Fix: keep the privacy settings screen reachable without manage_options
+-   Fix: apply yard_edit_privacy_policy regardless of who is logged in, so it also works under WP-CLI and cron
+
+## [v3.5.4] - 2026-11-11
+
+-   Feat: show divider line on admin menu separators
+
+## [v3.5.3] - 2026-11-05
+
+-   Fix: keep dots inside sanitized file names, so dotted slugs from other plugins (e.g. versioned template paths) stay intact
+-   Fix: don't let transliteration create new dots in file names (e.g. a fullwidth full stop turning into a real dot)
+
+## [v3.5.2] - 2026-11-03
+
+-   Fix: don't add a trailing dot to file names without an extension
+
 ## [v3.5.1] - 2026-10-31
 
 -   Fix: only strip fittext from array typography supports
