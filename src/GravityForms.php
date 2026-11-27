@@ -412,4 +412,27 @@ class GravityForms
 		// Plugins also sanitize bare template slugs (fe TEC's 'silence'), which must not gain a trailing dot.
 		return '' === $extension ? $baseName : $baseName . '.' . $extension;
 	}
+
+	/**
+	 * Ensures that the Euro symbol is displayed on the left side of the amount.
+	 *
+	 * @param array<string, array<string, string|int>> $currencies
+	 *
+	 * @return array<string, array<string, string|int>>
+	 *
+	 * @since NEXT
+	 */
+	#[Filter('gform_currencies', 10)]
+	public function placeEuroSymbolBeforeAmount(array $currencies): array
+	{
+		if (! isset($currencies['EUR'])) {
+			return $currencies;
+		}
+
+		$currencies['EUR']['symbol_left'] = '&#8364;';
+		$currencies['EUR']['symbol_right'] = '';
+		$currencies['EUR']['symbol_padding'] = ' ';
+
+		return $currencies;
+	}
 }
