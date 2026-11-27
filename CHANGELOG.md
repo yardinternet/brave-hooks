@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [NEXT] - 2026-11
+
+-   Refactor: euro symbol before amount in GF price fields
+
 ## [v3.5.5] - 2026-11-20
 
 -   Fix: register Simple History hooks when the plugin is installed as wordpress-simple-history
